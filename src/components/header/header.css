@@ -1,0 +1,26 @@
+.head{
+    display: flex;
+    height:50%;
+    width: 100%;
+    padding: 1rem 0 1rem 0;
+    border: 2px solid black;
+}
+.head1{
+    width: 30%;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+}
+.head2{
+    width: 60%;
+    display: flex;
+    gap:2rem;
+    justify-content: center;
+}
+.head3{
+    width: 10%;
+}
+.entity{
+    font-size: 1.5rem;
+
+}

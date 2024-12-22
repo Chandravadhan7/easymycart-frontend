@@ -11,8 +11,7 @@ export default function Login() {
 
     const validate = () => {
         let isValid = true;
-
-        // Reset error messages before validation
+        
         setUsernameError('');
         setPasswordError('');
 
@@ -35,6 +34,7 @@ export default function Login() {
         let inputobj = { "userName": username, "password": password };
         fetch("http://localhost:8080/user/login", {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(inputobj),
         })
@@ -60,7 +60,7 @@ export default function Login() {
         })
         .catch((err) => {
             console.error("Login error:", err);
-            setPasswordError('Invalid username or password'); // Display error message
+            setPasswordError('Invalid username or password'); 
         });
         
     };

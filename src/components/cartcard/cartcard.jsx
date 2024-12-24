@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux"
 import { removeFromCart } from "../../store/slices/cartSlice";
 import "./cardcard.css"
+import Quantity from "../quantity/quantity";
+
 export default function CartCard({cartitem}){
     let dispatch = useDispatch();
 
@@ -37,7 +39,7 @@ export default function CartCard({cartitem}){
          <div className="travis">
          <button onClick={handleRemoveFromCart} className="butn2">X</button>
            <h4>{cartitem?.title}</h4>
-           {/* <Quantity cartitem={cartitem} /> */}
+          <Quantity cartItem={cartitem}/>
            
            <p>${cartitem?.price}</p>
          </div>

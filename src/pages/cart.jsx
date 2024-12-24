@@ -6,7 +6,7 @@ import { fetchCartItems } from "./fetchCartItems";
 
 export default function Cart(){
     let dispatch = useDispatch();
-    const [cartId, setCartId] = useState(null);
+    let [cartId, setCartId] = useState(null);
     let cart = useSelector((state) => {return state.cart});
     console.log("cart", JSON.stringify(cart, null, 2));
     
@@ -22,6 +22,8 @@ export default function Cart(){
           })
           .catch((error) => console.error("Error fetching cart entity:", error));
       }, []); 
+
+      
     
       useEffect(() => {
         if (cartId) {
@@ -35,7 +37,7 @@ export default function Cart(){
             <div className="cart-page1">
             {cart.map((item) => {
                 return(
-                    <CartCard cartitem ={item}/>
+                  <CartCard cartitem ={item}/>
                 )
             })}
             </div>

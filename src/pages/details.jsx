@@ -5,19 +5,59 @@ import ProductCard from "../components/productcard/productcard";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/slices/cartSlice";
+import { addToWishlist,setWishlist } from "../store/slices/wishListSlice";
+import { fetchCartItems } from "./fetchCartItems";
+import { fetchWishlist } from "./fetchWishlistItems";
 export default function Details(){
     let [productDetails,setProductDetails] = useState(null);
     let [categoryproducts,setCategoryProducts] = useState([]);
     let [productRating,setProductRating] = useState(null);
     let [cartDetails,setCartDetails] = useState(null);
+    let [wishlistDetails,setWishlistDetails] = useState(null);
     let dispatch = useDispatch();
     let navigate = useNavigate();
 
     let cart = useSelector((state) => {return state.cart});
 
+    let wishlist = useSelector((state) => {return state.wishlist});
+    console.log(wishlist);
     let param = useParams();
 
- 
+    useEffect(() => {
+        async function fetchWishlist(){
+            try{
+              const response = await fetch("http://localhost:8080/wishlist/",{
+                method:'GET',
+                credentials:'include',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+              });
+
+              if(!response.ok){
+                const errorText = await response.text();
+                throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
+              }
+              const resp = await response.json();
+              console.log("wishlist retrived successfully:",resp);
+              setWishlistDetails(resp);
+            }catch(error){
+                console.error("Error fetching cart:", error);
+            }
+        }
+        fetchWishlist();
+    },[dispatch])
+
+    useEffect(() => {
+        if (cartDetails?.id) {
+          dispatch(fetchCartItems(cartDetails?.id));
+        }
+    }, [cartDetails?.id, dispatch]);
+    useEffect(() => {
+        if(wishlistDetails?.id){
+            dispatch(fetchWishlist(wishlistDetails?.id))
+        }
+    },[wishlistDetails?.id,dispatch])
     useEffect(() => {
         async function fetchCart() {
             try {
@@ -90,6 +130,33 @@ export default function Details(){
           console.error("Error adding to cart:", error.message);
         }
       }
+
+      async function handleAddToWishlist(){
+        try{
+            if (!productDetails || !productDetails.id) {
+                throw new Error("Product details are missing or invalid.");
+              }
+          
+              console.log("Product ID:", productDetails.id);
+          
+              dispatch(addToWishlist(productDetails));
+          
+              if (!cartDetails || !cartDetails.id) {
+                throw new Error("Cart details are missing or invalid.");
+              }
+        const wishlistId = wishlistDetails.id;
+        const response  = await fetch(`http://localhost:8080/wishlist/${wishlistId}/wishlistitems?productId=${productDetails.id}`,{
+            method:'POST',
+            headers: { "Content-Type": "application/json" },
+        });
+        if(!response.ok){
+            throw new Error(`Failed to add to cart. Status: ${response.status}`); 
+        }
+        console.log("product added successfully")
+    }catch(error){
+
+    }
+      };
     
     useEffect(function(){
         if(productDetails && productDetails.category_id){
@@ -123,6 +190,10 @@ export default function Details(){
         }
     }, []);
 
+    function handleRemoveFromWishlist(){
+
+    }
+
     return(
         <div>
         <div className="details">
@@ -146,10 +217,10 @@ export default function Details(){
                 <button onClick={() =>{productDetails && cart.some(item => item.id === productDetails?.id) ? navigate('/cart'):handleAddToCart()}} className="btn">
                     {cart.some(item => item.id === productDetails?.id)?'Go To Cart':'Add To Cart'}
                 </button>
-                {/* <button onClick={() =>{wishlist.some(item => item.id === productDetails.id)?handleRemoveFromWishlist():handleAddToWishlist()}} className="btn123">
-                    {wishlist.some(item => item.id === productDetails.id)?'Wishlisted':'wishlist'}</button>
-            */}
-            </div>
+                <button onClick={() => wishlist.some(item => item.id === productDetails?.id)? handleRemoveFromWishlist(): handleAddToWishlist()}className="btn123">
+    {wishlist.some(item => item.id === productDetails?.id) ? 'Wishlisted' : 'Wishlist'}
+</button> 
+</div>
              
             </div>
         </div>

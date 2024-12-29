@@ -1,33 +1,33 @@
-.parent{
-    display: flex;
-    height: 50%;
-    width:100%;
-    padding-top: 2rem;
+.parent {
+  display: flex;
+  height: 50%;
+  width: 100%;
+  padding-top: 2rem;
 }
-.side1{
-    width:15%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap:2rem;
+.side1 {
+  width: 15%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
-.side11{
-    font-size: 1.5rem;
+.side11 {
+  font-size: 1.5rem;
 }
-.side2{
-    width: 85%;
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap:2rem;
-    justify-content: center;
+.side2 {
+  width: 85%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
 }
 .productitem {
-    width:15rem;
-    height:20rem;
-    border:2px solid black;
-    border-radius: 0.5rem;
+  width: 15rem;
+  height: 20rem;
+  border: 2px solid black;
+  border-radius: 0.5rem;
 }
-.productitem:hover{
-    scale: 1.02;
+.productitem:hover {
+  scale: 1.02;
 }

@@ -1,11 +1,18 @@
-import { useState } from "react";
-import { setCart } from "../store/slices/cartSlice";
+import { useState } from 'react';
+import { setCart } from '../store/slices/cartSlice';
 
 export const fetchCartItems = (cartId) => async (dispatch) => {
   try {
+    let sessionKey = sessionStorage.getItem('sessionId');
+    let userId = sessionStorage.getItem('userId');
     const response = await fetch(`http://localhost:8080/cart/${cartId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
+      method: 'GET',
+      credentials: 'include', // Include session cookies
+      headers: {
+        'Content-Type': 'application/json',
+        sessionId: sessionKey,
+        userId: userId,
+      },
     });
 
     if (!response.ok) {
@@ -14,15 +21,21 @@ export const fetchCartItems = (cartId) => async (dispatch) => {
 
     const cartItems = await response.json();
     const productPromises = cartItems.map((item) =>
-        fetch(`http://localhost:8080/product/${item.product_id}`).then((resp) =>
-          resp.json()
-        )
-      );
-  
-      const cartProducts = await Promise.all(productPromises);
-  
-      dispatch(setCart(cartProducts));
+      fetch(`http://localhost:8080/product/${item.product_id}`, {
+        method: 'GET',
+        credentials: 'include', // Include session cookies
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: sessionKey,
+          userId: userId,
+        },
+      }).then((resp) => resp.json()),
+    );
+
+    const cartProducts = await Promise.all(productPromises);
+
+    dispatch(setCart(cartProducts));
   } catch (error) {
-    console.error("Error fetching cart items:", error);
+    console.error('Error fetching cart items:', error);
   }
 };

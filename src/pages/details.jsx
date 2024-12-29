@@ -1,238 +1,329 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import "./details.css"
-import ProductCard from "../components/productcard/productcard";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../store/slices/cartSlice";
-import { addToWishlist,setWishlist } from "../store/slices/wishListSlice";
-import { fetchCartItems } from "./fetchCartItems";
-import { fetchWishlist } from "./fetchWishlistItems";
-export default function Details(){
-    let [productDetails,setProductDetails] = useState(null);
-    let [categoryproducts,setCategoryProducts] = useState([]);
-    let [productRating,setProductRating] = useState(null);
-    let [cartDetails,setCartDetails] = useState(null);
-    let [wishlistDetails,setWishlistDetails] = useState(null);
-    let dispatch = useDispatch();
-    let navigate = useNavigate();
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import './details.css';
+import ProductCard from '../components/productcard/productcard';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../store/slices/cartSlice';
+import { addToWishlist, setWishlist } from '../store/slices/wishListSlice';
+import { fetchCartItems } from './fetchCartItems';
+import { fetchWishlist } from './fetchWishlistItems';
+export default function Details() {
+  let [productDetails, setProductDetails] = useState(null);
+  let [categoryproducts, setCategoryProducts] = useState([]);
+  let [productRating, setProductRating] = useState(null);
+  let [cartDetails, setCartDetails] = useState(null);
+  let [wishlistDetails, setWishlistDetails] = useState(null);
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
 
-    let cart = useSelector((state) => {return state.cart});
+  let cart = useSelector((state) => {
+    return state.cart;
+  });
 
-    let wishlist = useSelector((state) => {return state.wishlist});
-    console.log(wishlist);
-    let param = useParams();
+  let wishlist = useSelector((state) => {
+    return state.wishlist;
+  });
+  console.log(wishlist);
+  let param = useParams();
 
-    useEffect(() => {
-        async function fetchWishlist(){
-            try{
-              const response = await fetch("http://localhost:8080/wishlist/",{
-                method:'GET',
-                credentials:'include',
-                headers:{
-                    'Content-Type': 'application/json',
-                },
-              });
+  useEffect(() => {
+    async function fetchWishlist() {
+      try {
+        let sessionKey = sessionStorage.getItem('sessionId');
+        let userId = sessionStorage.getItem('userId');
+        const response = await fetch('http://localhost:8080/wishlist/', {
+          method: 'GET',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
+        });
 
-              if(!response.ok){
-                const errorText = await response.text();
-                throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
-              }
-              const resp = await response.json();
-              console.log("wishlist retrived successfully:",resp);
-              setWishlistDetails(resp);
-            }catch(error){
-                console.error("Error fetching cart:", error);
-            }
-        }
-        fetchWishlist();
-    },[dispatch])
-
-    useEffect(() => {
-        if (cartDetails?.id) {
-          dispatch(fetchCartItems(cartDetails?.id));
-        }
-    }, [cartDetails?.id, dispatch]);
-    useEffect(() => {
-        if(wishlistDetails?.id){
-            dispatch(fetchWishlist(wishlistDetails?.id))
-        }
-    },[wishlistDetails?.id,dispatch])
-    useEffect(() => {
-        async function fetchCart() {
-            try {
-                const response = await fetch("http://localhost:8080/cart/", {
-                    method: 'GET',
-                    credentials: 'include', 
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-    
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
-                }
-    
-                const resp = await response.json();
-                console.log("Cart retrieved successfully:", resp);
-                setCartDetails(resp);
-            } catch (error) {
-                console.error("Error fetching cart:", error);
-            }
-        }
-    
-        fetchCart();
-    }, [dispatch]);
-
-    useEffect(function(){
-       fetch(`http://localhost:8080/product/${param.id}`)
-       .then((response) => {
-        return response.json();
-       })
-       .then((response) => {
-        console.log(response);
-        setProductDetails(response);
-       })
-    },[param.id])
-
-
-    async function handleAddToCart() {
-        try {
-          if (!productDetails || !productDetails.id) {
-            throw new Error("Product details are missing or invalid.");
-          }
-      
-          console.log("Product ID:", productDetails.id);
-      
-          dispatch(addToCart(productDetails));
-      
-          if (!cartDetails || !cartDetails.id) {
-            throw new Error("Cart details are missing or invalid.");
-          }
-      
-          const cartId = cartDetails.id;
-      
-          const response = await fetch(
-            `http://localhost:8080/cart/${cartId}/cartitems?product_id=${productDetails.id}&quantity=1`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-            }
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}. Message: ${errorText}`,
           );
-      
-          if (!response.ok) {
-            throw new Error(`Failed to add to cart. Status: ${response.status}`);
-          }
-      
-          console.log("Product successfully added to cart.");
-        } catch (error) {
-          console.error("Error adding to cart:", error.message);
         }
+        const resp = await response.json();
+        console.log('wishlist retrived successfully:', resp);
+        setWishlistDetails(resp);
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    }
+    fetchWishlist();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (cartDetails?.id) {
+      dispatch(fetchCartItems(cartDetails?.id));
+    }
+  }, [cartDetails?.id, dispatch]);
+  useEffect(() => {
+    if (wishlistDetails?.id) {
+      dispatch(fetchWishlist(wishlistDetails?.id));
+    }
+  }, [wishlistDetails?.id, dispatch]);
+  useEffect(() => {
+    async function fetchCart() {
+      try {
+        let sessionKey = sessionStorage.getItem('sessionId');
+        let userId = sessionStorage.getItem('userId');
+        const response = await fetch('http://localhost:8080/cart/', {
+          method: 'GET',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}. Message: ${errorText}`,
+          );
+        }
+
+        const resp = await response.json();
+        console.log('Cart retrieved successfully:', resp);
+        setCartDetails(resp);
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    }
+
+    fetchCart();
+  }, [dispatch]);
+
+  useEffect(
+    function () {
+      let sessionKey = sessionStorage.getItem('sessionId');
+      let userId = sessionStorage.getItem('userId');
+      fetch(`http://localhost:8080/product/${param.id}`, {
+        method: 'GET',
+        credentials: 'include', // Include session cookies
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: sessionKey,
+          userId: userId,
+        },
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          console.log(response);
+          setProductDetails(response);
+        });
+    },
+    [param.id],
+  );
+
+  async function handleAddToCart() {
+    try {
+      let sessionKey = sessionStorage.getItem('sessionId');
+      let userId = sessionStorage.getItem('userId');
+      if (!productDetails || !productDetails.id) {
+        throw new Error('Product details are missing or invalid.');
       }
 
-      async function handleAddToWishlist(){
-        try{
-            if (!productDetails || !productDetails.id) {
-                throw new Error("Product details are missing or invalid.");
-              }
-          
-              console.log("Product ID:", productDetails.id);
-          
-              dispatch(addToWishlist(productDetails));
-          
-              if (!cartDetails || !cartDetails.id) {
-                throw new Error("Cart details are missing or invalid.");
-              }
-        const wishlistId = wishlistDetails.id;
-        const response  = await fetch(`http://localhost:8080/wishlist/${wishlistId}/wishlistitems?productId=${productDetails.id}`,{
-            method:'POST',
-            headers: { "Content-Type": "application/json" },
-        });
-        if(!response.ok){
-            throw new Error(`Failed to add to cart. Status: ${response.status}`); 
-        }
-        console.log("product added successfully")
-    }catch(error){
+      console.log('Product ID:', productDetails.id);
 
+      dispatch(addToCart(productDetails));
+
+      if (!cartDetails || !cartDetails.id) {
+        throw new Error('Cart details are missing or invalid.');
+      }
+
+      const cartId = cartDetails.id;
+
+      const response = await fetch(
+        `http://localhost:8080/cart/${cartId}/cartitems?product_id=${productDetails.id}&quantity=1`,
+        {
+          method: 'POST',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to add to cart. Status: ${response.status}`);
+      }
+
+      console.log('Product successfully added to cart.');
+    } catch (error) {
+      console.error('Error adding to cart:', error.message);
     }
-      };
-    
-    useEffect(function(){
-        if(productDetails && productDetails.category_id){
-        fetch(`http://localhost:8080/product/category's/${productDetails?.category_id}`)
-        .then((response) => {
+  }
+
+  async function handleAddToWishlist() {
+    try {
+      let sessionKey = sessionStorage.getItem('sessionId');
+      let userId = sessionStorage.getItem('userId');
+      if (!productDetails || !productDetails.id) {
+        throw new Error('Product details are missing or invalid.');
+      }
+
+      console.log('Product ID:', productDetails.id);
+
+      dispatch(addToWishlist(productDetails));
+
+      if (!cartDetails || !cartDetails.id) {
+        throw new Error('Cart details are missing or invalid.');
+      }
+      const wishlistId = wishlistDetails.id;
+      const response = await fetch(
+        `http://localhost:8080/wishlist/${wishlistId}/wishlistitems?productId=${productDetails.id}`,
+        {
+          method: 'POST',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
+        },
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to add to cart. Status: ${response.status}`);
+      }
+      console.log('product added successfully');
+    } catch (error) {}
+  }
+
+  useEffect(
+    function () {
+      let sessionKey = sessionStorage.getItem('sessionId');
+      let userId = sessionStorage.getItem('userId');
+      if (productDetails && productDetails.category_id) {
+        fetch(
+          `http://localhost:8080/product/category's/${productDetails?.category_id}`,
+          {
+            method: 'GET',
+            credentials: 'include', // Include session cookies
+            headers: {
+              'Content-Type': 'application/json',
+              sessionId: sessionKey,
+              userId: userId,
+            },
+          },
+        )
+          .then((response) => {
             return response.json();
-        })
-        .then((response) => {
+          })
+          .then((response) => {
             console.log(response);
             setCategoryProducts(response);
+          });
+      }
+    },
+    [productDetails],
+  );
+
+  useEffect(() => {
+    let sessionKey = sessionStorage.getItem('sessionId');
+    let userId = sessionStorage.getItem('userId');
+    if (productDetails && productDetails?.rating_id) {
+      fetch(
+        `http://localhost:8080/product/rating/${productDetails?.rating_id}`,
+        {
+          method: 'GET',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
+        },
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
         })
+        .then((response) => {
+          console.log(response);
+          setProductRating(response);
+        })
+        .catch((error) => {
+          console.error('Error fetching rating:', error);
+        });
     }
-    },[productDetails])
+  }, []);
 
-    useEffect(() => {
-        if (productDetails && productDetails?.rating_id) {
-            fetch(`http://localhost:8080/product/rating/${productDetails?.rating_id}`)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then((response) => {
-                    console.log(response);
-                    setProductRating(response);
-                })
-                .catch((error) => {
-                    console.error("Error fetching rating:", error);
-                });
-        }
-    }, []);
+  function handleRemoveFromWishlist() {}
 
-    function handleRemoveFromWishlist(){
-
-    }
-
-    return(
-        <div>
-        <div className="details">
-            <div className="det1">
-                <div className="imgcont">
-                <img src={productDetails?.image} alt={productDetails?.title} className="img-size"/>
-                </div>
-               
+  return (
+    <div>
+      <div className="details">
+        <div className="det1">
+          <div className="imgcont">
+            <img
+              src={productDetails?.image}
+              alt={productDetails?.title}
+              className="img-size"
+            />
+          </div>
+        </div>
+        <div className="det2">
+          <div className="ttl">{productDetails?.title}</div>
+          <div className="rating2">
+            <div style={{ fontWeight: 'bolder' }}>{productRating?.score}</div>
+            <div>| {productRating?.rate_count} Ratings</div>
+          </div>
+          <div className="money">₹{productDetails?.price}</div>
+          <div className="tax">inclusive of all taxes</div>
+          <div className="butns">
+            <button
+              onClick={() => {
+                productDetails &&
+                cart.some((item) => item.id === productDetails?.id)
+                  ? navigate('/cart')
+                  : handleAddToCart();
+              }}
+              className="btn"
+            >
+              {cart.some((item) => item.id === productDetails?.id)
+                ? 'Go To Cart'
+                : 'Add To Cart'}
+            </button>
+            <button
+              onClick={() =>
+                wishlist.some((item) => item.id === productDetails?.id)
+                  ? handleRemoveFromWishlist()
+                  : handleAddToWishlist()
+              }
+              className="btn123"
+            >
+              {wishlist.some((item) => item.id === productDetails?.id)
+                ? 'Wishlisted'
+                : 'Wishlist'}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="samecat">
+        {categoryproducts.map((item) => {
+          return (
+            <div className="procont">
+              <Link to={`/product/${item.id}`}>
+                <ProductCard product={item} />
+              </Link>
             </div>
-            <div className="det2">
-                <div className="ttl">
-                   {productDetails?.title}
-                </div>
-                <div className="rating2">
-                <div style={{fontWeight:"bolder"}}>{productRating?.score}</div>
-                <div>| {productRating?.rate_count} Ratings</div>
-                </div>
-                <div className="money">₹{productDetails?.price}</div>
-             <div className="tax">inclusive of all taxes</div>
-             <div className="butns">
-                <button onClick={() =>{productDetails && cart.some(item => item.id === productDetails?.id) ? navigate('/cart'):handleAddToCart()}} className="btn">
-                    {cart.some(item => item.id === productDetails?.id)?'Go To Cart':'Add To Cart'}
-                </button>
-                <button onClick={() => wishlist.some(item => item.id === productDetails?.id)? handleRemoveFromWishlist(): handleAddToWishlist()}className="btn123">
-    {wishlist.some(item => item.id === productDetails?.id) ? 'Wishlisted' : 'Wishlist'}
-</button> 
-</div>
-             
-            </div>
-        </div>
-        <div className="samecat">
-          {categoryproducts.map((item) => {
-            return(
-                <div className="procont">
-                <Link to = {`/product/${item.id}`}><ProductCard product={item}/></Link>
-                </div>
-            )
-          })}
-        </div>
-        </div>
-    )
+          );
+        })}
+      </div>
+    </div>
+  );
 }

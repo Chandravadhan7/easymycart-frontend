@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit/react";
+import { createSlice } from '@reduxjs/toolkit/react';
 
 const initialState = [];
 
 const cartSlice = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
   reducers: {
     addToCart(state, action) {
@@ -18,13 +18,11 @@ const cartSlice = createSlice({
       return state.filter((item) => item.id !== action.payload);
     },
     setCart(state, action) {
-      console.log("Payload received in setCart reducer:", action.payload);
+      console.log('Payload received in setCart reducer:', action.payload);
       return action.payload;
     },
   },
 });
-export const { addToCart, removeFromCart,setCart } = cartSlice.actions;
-
-
+export const { addToCart, removeFromCart, setCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

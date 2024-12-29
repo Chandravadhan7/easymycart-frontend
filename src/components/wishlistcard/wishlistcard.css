@@ -1,0 +1,19 @@
+.wishcard {
+  display: flex;
+  flex-direction: column;
+  height: 360px;
+  width: 250px;
+  border: 2px solid rgb(221, 220, 220);
+  padding: 1rem 1rem;
+  gap: 1rem;
+}
+.containimage {
+  height: 70%;
+  width: 100%;
+  overflow: hidden;
+}
+.imge {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

@@ -10,8 +10,8 @@ export default function Category() {
   let param = useParams();
 
   useEffect(function () {
-    let sessionKey = sessionStorage.getItem('sessionId');
-    let userId = sessionStorage.getItem('userId');
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
     fetch(`http://localhost:8080/product/category's/${param.id}`, {
       method: 'GET',
       credentials: 'include', // Include session cookies
@@ -30,8 +30,8 @@ export default function Category() {
       });
   });
   useEffect(function () {
-    let sessionKey = sessionStorage.getItem('sessionId');
-    let userId = sessionStorage.getItem('userId');
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
     fetch('http://localhost:8080/product/category', {
       method: 'GET',
       credentials: 'include', // Include session cookies

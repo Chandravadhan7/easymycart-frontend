@@ -9,8 +9,8 @@ export default function Quantity({ cartItem }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let sessionKey = sessionStorage.getItem('sessionId');
-    let userId = sessionStorage.getItem('userId');
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
     fetch('http://localhost:8080/cart/', {
       method: 'GET',
       credentials: 'include', // Include session cookies
@@ -29,8 +29,8 @@ export default function Quantity({ cartItem }) {
   }, []);
 
   useEffect(() => {
-    let sessionKey = sessionStorage.getItem('sessionId');
-    let userId = sessionStorage.getItem('userId');
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
     if (cartId && cartItem.id) {
       setLoading(true);
       fetch(`http://localhost:8080/cart/${cartId}/${cartItem.id}`, {
@@ -53,8 +53,8 @@ export default function Quantity({ cartItem }) {
 
   async function increment() {
     try {
-      let sessionKey = sessionStorage.getItem('sessionId');
-      let userId = sessionStorage.getItem('userId');
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
       const response = await fetch(
         `http://localhost:8080/cart/cartitems/${cartItem.id}/increment`,
         {
@@ -79,8 +79,8 @@ export default function Quantity({ cartItem }) {
 
   async function decrement() {
     try {
-      let sessionKey = sessionStorage.getItem('sessionId');
-      let userId = sessionStorage.getItem('userId');
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
       const response = await fetch(
         `http://localhost:8080/cart/cartitems/${cartItem.id}/decrement`,
         {
@@ -110,8 +110,8 @@ export default function Quantity({ cartItem }) {
     const productId = cartItem.id;
 
     try {
-      let sessionKey = sessionStorage.getItem('sessionId');
-      let userId = sessionStorage.getItem('userId');
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
       const response = await fetch(`http://localhost:8080/cart/${productId}`, {
         method: 'DELETE',
         credentials: 'include', // Include session cookies

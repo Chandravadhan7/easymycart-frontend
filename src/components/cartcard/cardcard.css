@@ -1,4 +1,4 @@
-.card-cart {
+/* .card-cart {
   display: flex;
   width: 80%;
   align-items: center;
@@ -28,8 +28,8 @@
 }
 .butn2 {
   position: absolute;
-  top: 0; /* Aligns the button to the top of .head1 */
-  right: 0; /* Aligns the button to the right of .head1 */
+  top: 0;
+  right: 0; 
   background-color: white;
   color: black;
   border: none;
@@ -39,4 +39,46 @@
 }
 .classN {
   color: rgb(9, 168, 25);
+} */
+.cart-item {
+  display: flex;
+  gap: 20px;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-details h4 {
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+.cart-item-details p {
+  color: #555;
+}
+
+.cart-item-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.cart-item-actions button {
+  background-color: transparent;
+  border: none;
+  color: #2874f0;
+  cursor: pointer;
+}
+
+.cart-item-actions button:hover {
+  text-decoration: underline;
 }

@@ -7,7 +7,7 @@ export default function ProductCard({ product }) {
       </div>
       <div className="contents">
         <div>{product.title}</div>
-        <div>Rs.{product.price}</div>
+        <div>Rs.{product.sellingPrice}</div>
       </div>
     </div>
   );

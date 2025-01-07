@@ -2,8 +2,8 @@ import { setWishlist } from '../store/slices/wishListSlice';
 
 export const fetchWishlist = (wishlistId) => async (dispatch) => {
   try {
-    let sessionKey = sessionStorage.getItem('sessionId');
-    let userId = sessionStorage.getItem('userId');
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
     const response = await fetch(
       `http://localhost:8080/wishlist/${wishlistId}`,
       {

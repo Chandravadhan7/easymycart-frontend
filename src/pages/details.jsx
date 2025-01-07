@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './details.css';
 import ProductCard from '../components/productcard/productcard';
@@ -16,6 +16,15 @@ export default function Details() {
   let [wishlistDetails, setWishlistDetails] = useState(null);
   let dispatch = useDispatch();
   let navigate = useNavigate();
+  const scrollContainerRef = useRef(null);
+
+  const scrollLeft = () => {
+    scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+  };
+
+  const scrollRight = () => {
+    scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+  };
 
   let cart = useSelector((state) => {
     return state.cart;
@@ -30,8 +39,8 @@ export default function Details() {
   useEffect(() => {
     async function fetchWishlist() {
       try {
-        let sessionKey = sessionStorage.getItem('sessionId');
-        let userId = sessionStorage.getItem('userId');
+        let sessionKey = localStorage.getItem('sessionId');
+        let userId = localStorage.getItem('userId');
         const response = await fetch('http://localhost:8080/wishlist/', {
           method: 'GET',
           credentials: 'include', // Include session cookies
@@ -71,8 +80,8 @@ export default function Details() {
   useEffect(() => {
     async function fetchCart() {
       try {
-        let sessionKey = sessionStorage.getItem('sessionId');
-        let userId = sessionStorage.getItem('userId');
+        let sessionKey = localStorage.getItem('sessionId');
+        let userId = localStorage.getItem('userId');
         const response = await fetch('http://localhost:8080/cart/', {
           method: 'GET',
           credentials: 'include', // Include session cookies
@@ -103,8 +112,8 @@ export default function Details() {
 
   useEffect(
     function () {
-      let sessionKey = sessionStorage.getItem('sessionId');
-      let userId = sessionStorage.getItem('userId');
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
       fetch(`http://localhost:8080/product/${param.id}`, {
         method: 'GET',
         credentials: 'include', // Include session cookies
@@ -127,8 +136,8 @@ export default function Details() {
 
   async function handleAddToCart() {
     try {
-      let sessionKey = sessionStorage.getItem('sessionId');
-      let userId = sessionStorage.getItem('userId');
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
       if (!productDetails || !productDetails.id) {
         throw new Error('Product details are missing or invalid.');
       }
@@ -168,8 +177,8 @@ export default function Details() {
 
   async function handleAddToWishlist() {
     try {
-      let sessionKey = sessionStorage.getItem('sessionId');
-      let userId = sessionStorage.getItem('userId');
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
       if (!productDetails || !productDetails.id) {
         throw new Error('Product details are missing or invalid.');
       }
@@ -203,8 +212,8 @@ export default function Details() {
 
   useEffect(
     function () {
-      let sessionKey = sessionStorage.getItem('sessionId');
-      let userId = sessionStorage.getItem('userId');
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
       if (productDetails && productDetails.category_id) {
         fetch(
           `http://localhost:8080/product/category's/${productDetails?.category_id}`,
@@ -231,8 +240,8 @@ export default function Details() {
   );
 
   useEffect(() => {
-    let sessionKey = sessionStorage.getItem('sessionId');
-    let userId = sessionStorage.getItem('userId');
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
     if (productDetails && productDetails?.rating_id) {
       fetch(
         `http://localhost:8080/product/rating/${productDetails?.rating_id}`,
@@ -265,7 +274,7 @@ export default function Details() {
   function handleRemoveFromWishlist() {}
 
   return (
-    <div>
+    <div className="whole-cont">
       <div className="details">
         <div className="det1">
           <div className="imgcont">
@@ -313,7 +322,7 @@ export default function Details() {
           </div>
         </div>
       </div>
-      <div className="samecat">
+      {/* <div className="samecat">
         {categoryproducts.map((item) => {
           return (
             <div className="procont">
@@ -323,7 +332,24 @@ export default function Details() {
             </div>
           );
         })}
+      </div> */}
+      <div className="scroll-wrapper">
+      <button className="scroll-btn left" onClick={scrollLeft}>
+        &#8249;
+      </button>
+      <div className="samecat" ref={scrollContainerRef}>
+        {categoryproducts.map((item) => (
+          <div className="procont" key={item.id}>
+            <Link to={`/product/${item.id}`}>
+              <ProductCard product={item} />
+            </Link>
+          </div>
+        ))}
       </div>
+      <button className="scroll-btn right" onClick={scrollRight}>
+        &#8250;
+      </button>
+    </div>
     </div>
   );
 }

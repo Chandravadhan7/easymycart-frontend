@@ -3,8 +3,8 @@ import { setCart } from '../store/slices/cartSlice';
 
 export const fetchCartItems = (cartId) => async (dispatch) => {
   try {
-    let sessionKey = sessionStorage.getItem('sessionId');
-    let userId = sessionStorage.getItem('userId');
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
     const response = await fetch(`http://localhost:8080/cart/${cartId}`, {
       method: 'GET',
       credentials: 'include', // Include session cookies

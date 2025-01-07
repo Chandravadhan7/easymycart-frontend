@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import WishListCard from '../components/wishlistcard/wishlistcard';
 import { useEffect, useState } from 'react';
 import { fetchWishlist } from './fetchWishlistItems';
+import "./wishlist.css"
 
 export default function Wishlist() {
   let [wishlistId, setWishlistId] = useState(null);
@@ -11,8 +12,8 @@ export default function Wishlist() {
   useEffect(() => {
     async function fetchWishlist() {
       try {
-        let sessionKey = sessionStorage.getItem('sessionId');
-        let userId = sessionStorage.getItem('userId');
+        let sessionKey = localStorage.getItem('sessionId');
+        let userId = localStorage.getItem('userId');
         const response = await fetch('http://localhost:8080/wishlist/', {
           method: 'GET',
           credentials: 'include', // Include session cookies
@@ -46,11 +47,23 @@ export default function Wishlist() {
 
   if (wishlist && wishlist.length > 0) {
     return (
-      <div className="wish">
-        {wishlist.map((item) => {
-          return <WishListCard wishListItem={item} />;
-        })}
-      </div>
+      // <div className="wish">
+      //   {wishlist.map((item) => {
+      //     return <WishListCard wishListItem={item} />;
+      //   })}
+      // </div>
+      <div className="wishlist-container">
+      <h1 className="wishlist-title">My Wishlist</h1>
+      {wishlist && wishlist.length > 0 ? (
+        <div className="wishlist-grid">
+          {wishlist.map((item) => (
+            <WishListCard key={item.id} wishListItem={item} />
+          ))}
+        </div>
+      ) : (
+        <div className="wishlist-empty">No items in your wishlist</div>
+      )}
+    </div>
     );
   } else {
     return <div>nothing to show</div>;

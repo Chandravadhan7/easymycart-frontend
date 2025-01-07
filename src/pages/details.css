@@ -1,7 +1,15 @@
+.whole-cont{
+  display: flex;
+  margin: 0 7rem 0 7rem;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  gap:3rem;
+}
 .details {
   display: flex;
   width: 100%;
   padding: 2rem 0 0 0;
+  border: 2px solid black;
 }
 .det1 {
   width: 50%;
@@ -28,23 +36,69 @@
   border: 1px solid gray;
   object-fit: contain;
 }
+.scroll-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
 .samecat {
-  padding-top: 10rem;
   display: flex;
   width: 100%;
-  gap: 4rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+  gap: 16px; 
+  scroll-behavior: smooth; 
 }
+
+.samecat::-webkit-scrollbar {
+  display: none; 
+}
+
 .procont {
   width: 15rem;
   height: 21rem;
   border: 2px solid black;
   border-radius: 0.5rem;
+  flex-shrink: 0;
 }
+
 .procont:hover {
   scale: 1.02;
+  transition: transform 0.2s ease;
 }
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-btn.left {
+  left: 1rem;
+}
+
+.scroll-btn.right {
+  right: 1rem;
+}
+
+.scroll-btn:hover {
+  background-color: #f0f0f0;
+}
+
 .rating2 {
   display: flex;
   gap: 0.3rem;

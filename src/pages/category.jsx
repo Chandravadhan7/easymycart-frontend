@@ -50,6 +50,8 @@ export default function Category() {
       });
   }, []);
 
+  
+
   return (
     <div className="parent">
       <div className="side1">
@@ -65,7 +67,7 @@ export default function Category() {
         {products.map((item) => {
           return (
             <div className="productitem">
-              <ProductCard product={item} />
+              <Link to={`/product/${item.id}`}><ProductCard product={item}  /></Link>
             </div>
           );
         })}

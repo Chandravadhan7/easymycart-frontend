@@ -45,6 +45,8 @@
   gap: 20px;
   padding: 15px 0;
   border-bottom: 1px solid #ddd;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(94, 92, 92, 0.1);
 }
 
 .cart-item img {

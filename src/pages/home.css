@@ -61,17 +61,27 @@
 }
 .box22{
   display: flex;
-  height: 76%;
-  gap:1.5rem;
-  overflow-x:auto ;
+  align-items: center;
+  justify-content: center;
+  height:76%;
+  position: relative;
+}
+.box221 {
+  display: flex;
+  height: 96%;
+  width: 100%;
+  gap: 1.5rem;
+  overflow-x: auto;
   flex-wrap: nowrap;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For IE and Edge */
+  scroll-behavior: smooth;
+  position: relative;
 }
-.cat-box{
-  width:20%;
-  border: 2px solid blue;
-  height: 90%;
-  flex-shrink: 0;
+.box22::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
+
 .box3{
   border:2px solid greenyellow;
   height: 60%;
@@ -87,10 +97,60 @@
   line-height: 6rem;
   text-align: left;
 }
-.box32{
+.box321{
   display: flex;
-  height: 76%;
+  height: 100%;
+  width: 100%;
   gap:1.5rem;
   overflow-x:auto ;
   flex-wrap: nowrap;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+.box32{
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  height: 76%;
+}
+.fet-box{
+  width:25%;
+  height: 95%;
+  flex-shrink: 0;
+  border: 2px solid pink;
+  border-radius: 1rem;
+}
+.cat-box {
+  width: 20%;
+  border: 2px solid blue;
+  height: 90%;
+  flex-shrink: 0;
+  text-decoration: none;
+  text-align: center;
+  line-height: 4rem;
+  font-size: 1rem;
+  color: black;
+}
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 1;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.scroll-btn.left {
+  left: 1rem;
+}
+.scroll-btn.right {
+  right: 1rem;
 }

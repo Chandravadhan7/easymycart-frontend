@@ -95,11 +95,14 @@ import { Link } from 'react-router-dom';
 import CartCard from '../components/cartcard/cartcard';
 import { fetchCartItems } from './fetchCartItems';
 import "./cart.css";
+import Modal from "../components/modal/modal"
 
 export default function Cart() {
   const dispatch = useDispatch();
   const [cartId, setCartId] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  let [isModalOpen,setIsModalOpen] = useState(false);
+  let [isModalFormOpen,setIsFormModalOpen] = useState(false);
   const cart = useSelector((state) => state.cart);
 
   // Calculate total amount in the cart
@@ -182,11 +185,44 @@ export default function Cart() {
     );
   }
 
+  const handleOpenModal = () =>{
+    console.log("clicked")
+     setIsModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+     setIsModalOpen(false);
+  }
+  
+  const handleOpenFormModal = () => {
+    setIsModalOpen(false)
+     setIsFormModalOpen(true)
+  }
+
+  const handleCloseFormModal = () =>{
+     setIsFormModalOpen(false);
+  }
+
   if (cart && cart.length > 0) {
     return (
       <div className="cart-page">
       {/* Left Section */}
       <div className="cart-items">
+        <div className='address-bar'>
+          <div className='address-details'></div>
+          <div className='address-btn'>
+            <button className='chng-btn' onClick={handleOpenModal}>change</button>
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+              <h2>Modal title</h2>
+              <p>contents of modal</p>
+              <div>Add address <button onClick={handleOpenFormModal}>+</button></div>
+            </Modal>
+            <Modal isOpen={isModalFormOpen} onClose={handleCloseFormModal}>
+                <h2>Form</h2>
+                <p>add address</p>
+            </Modal>
+          </div>
+        </div>
         {cart.map((item, index) => (
           // <div className="cart-item" key={index}>
           //   <img src={item.image} alt={item.name} />

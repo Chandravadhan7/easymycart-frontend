@@ -1,6 +1,6 @@
 import './App.css';
 import Home from './pages/home';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Category from './pages/category';
 import Header from './components/header/header';
 import Details from './pages/details';
@@ -9,12 +9,23 @@ import Cart from './pages/cart';
 import Wishlist from './pages/wishlist';
 import  Checkout  from './pages/checkout';
 import Login from './pages/loginpage';
+import Order from './pages/order';
+import OrderDetails from './pages/orderDetails';
+import CategoryBar from './components/caterogybar/categorybar';
 
 function App() {
+  let location = useLocation();
+
+  const showCategoryBarPaths = ['/cart', '/wishlist', '/orders',"/product/category's/"];
+
+  const shouldShowCategoryBar = showCategoryBarPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
+
   return (
     <div className="App">
       <Header />
-      <Routes>
+       {shouldShowCategoryBar && <CategoryBar />}        <Routes>
         {/* <Route path="/*" element={<DashBoard />} /> */}
         <Route path="/*" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
@@ -23,6 +34,8 @@ function App() {
         <Route path="/product/:id" element={<Details />} />
         <Route path="/checkoutpage" element={<Checkout/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/orders" element={<Order/>}/>
+        <Route path="/orders/:cartId" element={<OrderDetails/>}/>
       </Routes>
     </div>
   );

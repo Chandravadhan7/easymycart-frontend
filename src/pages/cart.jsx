@@ -94,8 +94,10 @@ import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CartCard from '../components/cartcard/cartcard';
 import { fetchCartItems } from './fetchCartItems';
+import {userAddress} from './fetchUserAddress';
 import "./cart.css";
 import Modal from "../components/modal/modal"
+import CategoryBar from '../components/caterogybar/categorybar';
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -103,7 +105,17 @@ export default function Cart() {
   const [errorMessage, setErrorMessage] = useState(null);
   let [isModalOpen,setIsModalOpen] = useState(false);
   let [isModalFormOpen,setIsFormModalOpen] = useState(false);
+  let [fullName,setFullName] = useState('');
+  let [phone,setPhone] = useState('');
+  let [pinCode,setPincode] = useState('');
+  let [flatNumber,setFlatNumber] = useState('');
+  let [area,setArea] = useState('');
+  let [village,setVillage] = useState('');
+  
   const cart = useSelector((state) => state.cart);
+  console.log(cart)
+  const addresses = useSelector((state) => state.address);
+  console.log(addresses);
 
   // Calculate total amount in the cart
   const totalCart = useMemo(() => {
@@ -146,6 +158,9 @@ export default function Cart() {
     }
   }, [cartId, dispatch]);
 
+  useEffect(() => {
+    dispatch(userAddress());
+  },[]);
   // Handle place order logic
   const placeOrder = async () => {
     const sessionKey = localStorage.getItem('sessionId');
@@ -185,6 +200,24 @@ export default function Cart() {
     );
   }
 
+  const inputobj = {fullName,phone,pinCode,flatNumber,area,village};
+  const saveAddress = async function(){
+    if(!validate()) return;
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
+    const response = await fetch(`http://localhost:8080/address/`,{
+      method:'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        sessionId:sessionKey,
+        userId:userId
+      },
+      body:JSON.stringify(inputobj)
+    })
+    const data = await response.json();
+    console.log(data);
+  }
+
   const handleOpenModal = () =>{
     console.log("clicked")
      setIsModalOpen(true);
@@ -202,7 +235,28 @@ export default function Cart() {
   const handleCloseFormModal = () =>{
      setIsFormModalOpen(false);
   }
-
+ 
+  let isValid = true;
+  const validate = () =>{
+    if(!fullName){
+      isValid = false;
+    }
+    if(!phone){
+      isValid = false;
+    }
+    if(!pinCode){
+      isValid = false;
+    }
+    if(!flatNumber){
+      isValid = false;
+    }
+    if(!area){
+      isValid = false;
+    }
+    if(!village){
+      isValid = false;
+    }
+  }
   if (cart && cart.length > 0) {
     return (
       <div className="cart-page">
@@ -213,32 +267,59 @@ export default function Cart() {
           <div className='address-btn'>
             <button className='chng-btn' onClick={handleOpenModal}>change</button>
             <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-              <h2>Modal title</h2>
-              <p>contents of modal</p>
+              <div className='location'>Choose Location</div>
+              <div className='addresses'>
+                <div className='dis'>Select a delivery location to see product availability and delivery options</div>
+              {addresses.map((item) => {
+                return(
+                  <div className='add1'>
+                    <div>{item.fullName} ,</div>
+                    <div>Door No:-{item.flatNumber} ,</div>
+                    <div> {item.area} ,</div>
+                    <div>{item.village} ,</div>
+                    <div>{item.pinCode} </div>
+                  </div>
+                )
+              })}
+              </div>
               <div>Add address <button onClick={handleOpenFormModal}>+</button></div>
             </Modal>
-            <Modal isOpen={isModalFormOpen} onClose={handleCloseFormModal}>
-                <h2>Form</h2>
-                <p>add address</p>
+            <Modal isOpen={isModalFormOpen} onClose={handleCloseFormModal} >
+                <form  className='add-address'>
+                  <div className='add-address1'>
+                  <label>Full Name:</label>
+                  <input value = {fullName} className = 'add-addressfield' placeholder='Full Name' onChange={(e) => {setFullName(e.target.value)}} required />
+                  </div>
+                  <div className='add-address1'>
+                  <label>Phone Number:</label>
+                  <input value = {phone} className = 'add-addressfield' placeholder='phone' onChange={(e) => {setPhone(e.target.value)}} required/>
+                  </div>
+                  <div className='add-address1'>
+                  <label>Pin Code:</label>
+                  <input value = {pinCode} className = 'add-addressfield' placeholder='pin code' onChange={(e) => {setPincode(e.target.value)}} required/>
+                  </div>
+                  <div className='add-address1'>
+                  <label>Flat Number:</label>
+                  <input value = {flatNumber} className = 'add-addressfield' placeholder='Flat No.' onChange={(e) => {setFlatNumber(e.target.value)}} required/>
+                  </div>
+                  <div className='add-address1'>
+                  <label>Area/Locality:</label>
+                  <input value = {area} className = 'add-addressfield' placeholder='Area' onChange={(e) => {setArea(e.target.value)}} required/>
+                  </div>
+                  <div className='add-address1'>
+                  <label>Village/Town:</label>
+                  <input value = {village} className = 'add-addressfield' placeholder='village' onChange={(e) => {setVillage(e.target.value)}} required/>
+                  </div>
+                  <button className='add-address-btn' onClick={saveAddress}>save address</button>
+                </form>
             </Modal>
           </div>
         </div>
-        {cart.map((item, index) => (
-          // <div className="cart-item" key={index}>
-          //   <img src={item.image} alt={item.name} />
-          //   <div className="cart-item-details">
-          //     <h4>{item.name}</h4>
-          //     <p>Seller: {item.seller}</p>
-          //     <p>Price: ₹{item.price}</p>
-          //     <p>Quantity: {item.quantity}</p>
-          //   </div>
-          //   <div className="cart-item-actions">
-          //     <button>Save for later</button>
-          //     <button >Remove</button>
-          //   </div>
-          // </div>
+        <div className='cart-items-pro'>
+        {cart.map((item, index) => (         
           <CartCard cartitem={item}/>
         ))}
+        </div>
         
       </div>
 

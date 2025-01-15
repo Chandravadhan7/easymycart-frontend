@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './details.css';
+import StarIcon from '@mui/icons-material/Star';
 import ProductCard from '../components/productcard/productcard';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,22 +9,23 @@ import { addToCart } from '../store/slices/cartSlice';
 import { addToWishlist, setWishlist } from '../store/slices/wishListSlice';
 import { fetchCartItems } from './fetchCartItems';
 import { fetchWishlist } from './fetchWishlistItems';
+import { recentlyViewed } from './fetchRecentlyViewed';
 export default function Details() {
   let [productDetails, setProductDetails] = useState(null);
   let [categoryproducts, setCategoryProducts] = useState([]);
-  let [productRating, setProductRating] = useState(null);
   let [cartDetails, setCartDetails] = useState(null);
   let [wishlistDetails, setWishlistDetails] = useState(null);
   let dispatch = useDispatch();
   let navigate = useNavigate();
-  const scrollContainerRef = useRef(null);
+  const scrollContainerRef1 = useRef(null);
+  const scrollContainerRef2 = useRef(null);
 
-  const scrollLeft = () => {
-    scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+  const scrollLeft = (ref) => {
+    ref.current.scrollBy({ left: -300, behavior: 'smooth' });
   };
 
-  const scrollRight = () => {
-    scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+  const scrollRight = (ref) => {
+    ref.current.scrollBy({ left: 300, behavior: 'smooth' });
   };
 
   let cart = useSelector((state) => {
@@ -34,6 +36,10 @@ export default function Details() {
     return state.wishlist;
   });
   console.log(wishlist);
+
+  let recentProducts = useSelector((state) =>{
+    return state.recent;
+  })
   let param = useParams();
 
   useEffect(() => {
@@ -110,29 +116,65 @@ export default function Details() {
     fetchCart();
   }, [dispatch]);
 
-  useEffect(
-    function () {
-      let sessionKey = localStorage.getItem('sessionId');
-      let userId = localStorage.getItem('userId');
-      fetch(`http://localhost:8080/product/${param.id}`, {
-        method: 'GET',
-        credentials: 'include', // Include session cookies
-        headers: {
-          'Content-Type': 'application/json',
-          sessionId: sessionKey,
-          userId: userId,
-        },
+  useEffect(() =>{
+    dispatch(recentlyViewed())
+  },[])
+  useEffect(() => {
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
+    
+    // Fetch product details
+    fetch(`http://localhost:8080/product/${param.id}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        sessionId: sessionKey,
+        userId: userId,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
       })
-        .then((response) => {
-          return response.json();
-        })
-        .then((response) => {
-          console.log(response);
-          setProductDetails(response);
-        });
-    },
-    [param.id],
-  );
+      .then((productResponse) => {
+        if (productResponse.rating_id) {
+          return fetch(
+            `http://localhost:8080/product/rating/${productResponse.rating_id}`,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+                sessionId: sessionKey,
+                userId: userId,
+              },
+            },
+          )
+            .then((ratingResponse) => {
+              if (!ratingResponse.ok) {
+                throw new Error(`HTTP error! Status: ${ratingResponse.status}`);
+              }
+              return ratingResponse.json();
+            })
+            .then((ratingData) => ({
+              ...productResponse,
+              rating: ratingData,
+            }));
+        }
+        return productResponse; // No rating_id, return product as is
+      })
+      .then((finalResponse) => {
+        setProductDetails(finalResponse);
+        console.log(finalResponse)
+      })
+      .catch((error) => {
+        console.error('Error fetching product or rating:', error);
+      });
+  }, [param.id]);
+  
 
   async function handleAddToCart() {
     try {
@@ -230,46 +272,36 @@ export default function Details() {
           .then((response) => {
             return response.json();
           })
-          .then((response) => {
-            console.log(response);
-            setCategoryProducts(response);
-          });
+          .then((productResponse) => {
+            return Promise.all(
+             productResponse.map((product) => {
+              if(product.rating_id){
+              return fetch(`http://localhost:8080/product/rating/${product.rating_id}`,{
+                method: 'GET',
+                credentials: 'include', // Include session cookies
+                headers: {
+                 'Content-Type': 'application/json',
+                  sessionId: sessionKey,
+                  userId: userId,
+                },
+              }).then((ratingResponse)=>{
+                return ratingResponse.json();
+              }).then((ratingResponse) => {
+                return {...product,rating:ratingResponse};
+              })
+             }
+             return product;
+          })
+            )
+          }).then((finalResponse) => {
+            console.log("categoryproducts")
+            console.log(finalResponse)
+            setCategoryProducts(finalResponse)
+          })
       }
     },
     [productDetails],
   );
-
-  useEffect(() => {
-    let sessionKey = localStorage.getItem('sessionId');
-    let userId = localStorage.getItem('userId');
-    if (productDetails && productDetails?.rating_id) {
-      fetch(
-        `http://localhost:8080/product/rating/${productDetails?.rating_id}`,
-        {
-          method: 'GET',
-          credentials: 'include', // Include session cookies
-          headers: {
-            'Content-Type': 'application/json',
-            sessionId: sessionKey,
-            userId: userId,
-          },
-        },
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((response) => {
-          console.log(response);
-          setProductRating(response);
-        })
-        .catch((error) => {
-          console.error('Error fetching rating:', error);
-        });
-    }
-  }, []);
 
   function handleRemoveFromWishlist() {}
 
@@ -286,12 +318,17 @@ export default function Details() {
           </div>
         </div>
         <div className="det2">
+        <div className="ctry">{productDetails?.category}</div>
           <div className="ttl">{productDetails?.title}</div>
           <div className="rating2">
-            <div style={{ fontWeight: 'bolder' }}>{productRating?.score}</div>
-            <div>| {productRating?.rate_count} Ratings</div>
+            <div style={{ fontWeight: 'bolder' }}>{productDetails?.rating?.score}</div>
+            <div><StarIcon fontSize='smaller' style={{color:'green'}}/>| {productDetails?.rating?.rate_count} Ratings</div>
           </div>
-          <div className="money">₹{productDetails?.price}</div>
+          <div className="money">
+            <div>₹{productDetails?.sellingPrice}</div>
+            <div className='mrp'>MRP <span style={{textDecoration:'line-through'}}>₹{productDetails?.originalPrice}</span></div>
+            <div style={{fontSize:'50%',color:'orange'}}>({productDetails?.discount}% OFF)</div>
+            </div>
           <div className="tax">inclusive of all taxes</div>
           <div className="butns">
             <button
@@ -301,7 +338,7 @@ export default function Details() {
                   ? navigate('/cart')
                   : handleAddToCart();
               }}
-              className="btn"
+              className="btzn"
             >
               {cart.some((item) => item.id === productDetails?.id)
                 ? 'Go To Cart'
@@ -313,7 +350,7 @@ export default function Details() {
                   ? handleRemoveFromWishlist()
                   : handleAddToWishlist()
               }
-              className="btn123"
+              className="bottn123"
             >
               {wishlist.some((item) => item.id === productDetails?.id)
                 ? 'Wishlisted'
@@ -334,20 +371,41 @@ export default function Details() {
         })}
       </div> */}
       <div className="scroll-wrapper">
-      <button className="scroll-btn left" onClick={scrollLeft}>
+      <button className="scroll-btn left" onClick={() => scrollLeft(scrollContainerRef1)}>
         &#8249;
       </button>
-      <div className="samecat" ref={scrollContainerRef}>
+      <div className='sim-pro'>Similar products</div>
+      <div className="samecat" ref={scrollContainerRef1}>
         {categoryproducts.map((item) => (
           <div className="procont" key={item.id}>
-            <Link to={`/product/${item.id}`}>
+            <Link to={`/product/${item.id}`} className='custom-link'>
               <ProductCard product={item} />
             </Link>
           </div>
         ))}
       </div>
-      <button className="scroll-btn right" onClick={scrollRight}>
+      <button className="scroll-btn right" onClick={() => scrollRight(scrollContainerRef1)}>
         &#8250;
+      </button>
+    </div>
+    <div className='scroll-wrapper'>
+      <button className="scroll-btn left" onClick={() => scrollLeft(scrollContainerRef2)}>
+      &#8249;
+      </button>
+      <div className='sim-pro'>Recently Viewed products</div>
+      <div className='samecat' ref={scrollContainerRef2}>
+        {recentProducts.map((item) =>{
+          return(
+            <div className="procont" key={item.id}>
+            <Link to={`/product/${item.id}`}>
+              <ProductCard product={item} />
+            </Link>
+          </div>
+          )
+        })}
+      </div>
+      <button className="scroll-btn right" onClick={() => scrollRight(scrollContainerRef2)}>
+      &#8250;
       </button>
     </div>
     </div>

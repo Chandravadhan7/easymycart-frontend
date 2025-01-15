@@ -1,21 +1,36 @@
 .parent {
   display: flex;
-  height: 50%;
-  width: 100%;
-  padding-top: 2rem;
+  height: 100%;
+  width: 70%;
+  padding: 2% 5% 0 15%;
 }
 .side1 {
-  width: 15%;
+  width: 10%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+  padding: 2% 1% 2% 2%;
+  align-items: start;
 }
 .side11 {
-  font-size: 1.5rem;
+  /* border: 1px solid black; */
+  font-size: 90%;
+  width: 100%;
+  padding: 4% 0 4% 0;
+  text-align: start;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+  text-transform: capitalize;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.side11:hover{
+  transform: scale(1.02);
 }
 .side2 {
-  width: 85%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -25,8 +40,8 @@
 .productitem {
   width: 15rem;
   height: 20rem;
-  border: 2px solid black;
-  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 }
 .productitem:hover {
   scale: 1.02;
@@ -71,15 +86,14 @@
   height: 96%;
   width: 100%;
   gap: 1.5rem;
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For IE and Edge */
+  overflow-x: hidden;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
   scroll-behavior: smooth;
   position: relative;
 }
 .box22::-webkit-scrollbar {
-  display: none; /* For Chrome, Safari, and Opera */
+  display: none; 
 }
 
 .box3{
@@ -105,7 +119,6 @@
   overflow-x:auto ;
   flex-wrap: nowrap;
   scrollbar-width: none;
-  scroll-behavior: smooth;
 }
 .box32{
   display: flex;

@@ -9,7 +9,9 @@
   display: flex;
   width: 100%;
   padding: 2rem 0 0 0;
-  border: 2px solid black;
+  /* border: 2px solid black; */
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 }
 .det1 {
   width: 50%;
@@ -41,6 +43,11 @@
   width: 100%;
   display: flex;
   align-items: center;
+  flex-direction: column;
+  /* border: 2px solid black; */
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 }
 
 .samecat {
@@ -51,8 +58,15 @@
   -ms-overflow-style: none; 
   gap: 16px; 
   scroll-behavior: smooth; 
+  height: 80%;
 }
-
+.sim-pro{
+  height: 50%;
+    width: 100%;
+    font-size: 190%;
+    text-align: left;
+    padding: 2% 0 2% 3%;
+}
 .samecat::-webkit-scrollbar {
   display: none; 
 }
@@ -60,8 +74,8 @@
 .procont {
   width: 15rem;
   height: 21rem;
-  border: 2px solid black;
-  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
   flex-shrink: 0;
 }
 
@@ -109,8 +123,14 @@
 }
 .money {
   display: flex;
-  align-items: start;
+  justify-content: left;
+  align-items: center;
   font-size: xxx-large;
+  gap:2%;
+}
+.mrp{
+  font-size: 40%;
+  color: rgb(198, 196, 196);
 }
 .tax {
   color: rgb(3, 166, 3);
@@ -125,4 +145,32 @@
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
     'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   color: gray;
+}
+.butns {
+  display: flex;
+  gap: 2rem;
+}
+.bottn123 {
+  font-size: 1.2rem;
+  background-color: white;
+  border: 1px solid rgb(201, 200, 200);
+  background-color: rgb(251, 205, 119);
+  color: #fff;
+  font-weight: 400;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+.btzn {
+  background-color: #FF3E6C;
+  padding: 0.5rem 1rem;
+  color: azure;
+  border-radius: 0.3rem;
+  border: 2px solid palevioletred;
+  width: 50%;
+  display: flex;
+  align-items: start;
+  font-size: 1.8rem;
+  justify-content: center;
+  cursor: pointer;
+
 }

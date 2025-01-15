@@ -1,8 +1,8 @@
 import './header.css';
 import { Link, useNavigate } from 'react-router-dom';
-import AccountCircleOutlined from '@mui/icons-material/AccountCircleOutlined';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import PersonIcon from '@mui/icons-material/Person';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { useState } from 'react';
 export default function Header() {
@@ -48,18 +48,18 @@ export default function Header() {
         <SearchRoundedIcon className='icon'/>
       </div>
       <Link to='/wishlist' className='custom-link'><div className="head2">
-        <FavoriteBorderOutlinedIcon fontSize="large"/>
-        <div className="entity">Wishlist</div>
+        <div className="entity"><FavoriteIcon fontSize="large"/>wishlist</div>
       </div></Link>
-      <Link to='/cart' className='custom-link'><div className='head2'>
-        <ShoppingCartOutlinedIcon fontSize='large'/>
-        <div className='entity'>cart</div>
+      <Link to='/cart' className='custom-link'>
+      <div className='head2'>
+        
+        <div className='entity'><ShoppingCartIcon fontSize='large' />cart</div>
       </div></Link>
       {sessionId ? (
         // If logged in, show username with a dropdown
         <div className="head2" onClick={toggleDropdown}>
-          <AccountCircleOutlined fontSize="large" />
-          <div className="entity">{}</div>
+          
+          <div className="entity"><PersonIcon fontSize="large" />{}</div>
           {isDropdownOpen && (
             <div className="dropdown-menu">
               <ul>
@@ -78,7 +78,7 @@ export default function Header() {
         // If not logged in, show Login button
         <Link to="/login" className="custom-link">
           <div className="head2">
-            <AccountCircleOutlined fontSize="large" />
+            <PersonIcon fontSize="large" />
             <div className="entity">Login</div>
           </div>
         </Link>

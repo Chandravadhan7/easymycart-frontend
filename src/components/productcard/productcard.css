@@ -1,16 +1,17 @@
 .card {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 15rem;
-  /* padding: 1rem 1rem; */
+  height: 90%;
+  width: 13rem;
+  padding-left: 1rem ;
+  padding-top: 1rem;
+  gap:1rem;
 }
 .img-cont {
   width: 100%;
   height: 70%;
   overflow: hidden;
   border-radius: 2px;
-  background-color: aliceblue;
 }
 .productimg {
   width: 100%;
@@ -18,8 +19,57 @@
   object-fit: contain;
 }
 .contents {
-  height: 30%;
-  width: 100%;
+  /* height: 30%;
+  width: 100%; */
   display: flex;
   flex-direction: column;
+  gap:1rem;
+}
+.prce{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-weight: bold;
+    color: black;
+    gap:3%;
+}
+.original{
+  text-decoration: line-through;
+  font-size: 70%;
+  color: rgb(209, 206, 206);
+}
+.disc{
+  color: orange;
+  font-size: 80%;
+}
+.rating21{
+    display: flex;
+    gap:0.3rem;
+    border: 1px solid rgb(219, 217, 217);
+    width:35%;
+    justify-content: left;
+    font-family:'Times New Roman', Times, serif;
+    align-items: center;
+    color: black;
+    background-color: rgb(248, 244, 244);
+}
+.name{
+  overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 160px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: gray;
+    display: flex;
+    align-items: start;
+    font-size: smaller;
+}
+.cat{
+  display: flex;
+  font-size: large;
+  text-transform: capitalize;
+  justify-content: left;
+  align-items: start;
+  color: black;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }

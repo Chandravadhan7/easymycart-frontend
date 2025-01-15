@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { removeFromCart } from '../../store/slices/cartSlice';
 import { useDispatch } from 'react-redux';
+import "./quantity.css"
 
 export default function Quantity({ cartItem }) {
   const [cartDetails, setCartDetails] = useState(null);
@@ -139,17 +140,17 @@ export default function Quantity({ cartItem }) {
       {loading ? (
         <span>Loading...</span>
       ) : cartDetails ? (
-        <div>
-          <button onClick={increment} disabled={cartDetails.quantity >= 10}>
+        <div className='quantityy'>
+          <button onClick={increment} disabled={cartDetails.quantity >= 10} className='plus'>
             +
           </button>
-          <span>{cartDetails.quantity}</span>
+          <span className='num'>{cartDetails.quantity}</span>
           <button
             onClick={
               cartDetails.quantity > 1 ? decrement : handleRemoveFromCart
             }
             disabled={cartDetails.quantity <= 0}
-          >
+          className='plus'>
             -
           </button>
         </div>

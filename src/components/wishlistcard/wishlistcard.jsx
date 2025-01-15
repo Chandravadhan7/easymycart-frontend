@@ -26,7 +26,6 @@
 
 
 import './wishlistcard.css';
-
 export default function WishListCard({ wishListItem }) {
   const isOutOfStock = wishListItem?.isOutOfStock;
 

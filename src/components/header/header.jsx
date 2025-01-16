@@ -4,6 +4,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import LocalMallSharpIcon from '@mui/icons-material/LocalMallSharp';
+import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
+import Person4SharpIcon from '@mui/icons-material/Person4Sharp';
 import { useState } from 'react';
 export default function Header() {
   let navigate = useNavigate();
@@ -39,7 +42,7 @@ export default function Header() {
     setIsDropdownOpen(!isDropdownOpen);
   };
   const sessionId = localStorage.getItem("sessionId");
-
+  const username = localStorage.getItem("userName");
   return (
     <div className="head">
       <div className="head1">EasyMyCart</div>
@@ -59,18 +62,28 @@ export default function Header() {
         // If logged in, show username with a dropdown
         <div className="head2" onClick={toggleDropdown}>
           
-          <div className="entity"><PersonIcon fontSize="large" />{}</div>
+          <div className="entity" ><PersonIcon fontSize="large" />{"Hello,"+username}</div>
           {isDropdownOpen && (
             <div className="dropdown-menu">
-              <ul>
-                <li>
-                  <Link to="/profile" className="dropdown-item">Profile</Link>
-                </li>
-                <li>
-                  <Link to="/orders" className="dropdown-item">Orders</Link>
-                </li>
-                <li onClick={handlelogout} className="dropdown-item">Logout</li>
-              </ul>
+                <div className='dropdown-item'>
+                  <Link to="/profile" className='dropdown-item1'>
+                  <div className='dropdown-item-syb'><Person4SharpIcon/></div>
+                  <div className='dropdown-item-text'>Profile</div>
+                  </Link>
+                </div> 
+                <div className='dropdown-item'>
+                  <Link to="/orders" className='dropdown-item1'>
+                  <div className='dropdown-item-syb'><LocalMallSharpIcon/></div>
+                  <div className='dropdown-item-text'>Orders</div>
+                  </Link>
+                </div> 
+                <div className='dropdown-item' onClick={handlelogout}>
+                  <div className='dropdown-item1'>
+                  <div className='dropdown-item-syb'><LogoutSharpIcon/></div>
+                  <div className='dropdown-item-text'>Logout</div>
+                </div>
+                </div>
+                
             </div>
           )}
         </div>

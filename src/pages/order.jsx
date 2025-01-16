@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./order.css"
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 export default function Order(){
     let [orders,setOrders] = useState([]);
     const getOrders =  async function(){
@@ -75,9 +76,12 @@ export default function Order(){
                         <div className="order-child-date">
                             <div className="odr-id">ORDER # {item?.orderId}</div>
                             <div className="odr-del">
-                                <div className="del-date">
-                                    Delivered on {new Date(item.deliveredOn).toLocaleDateString('en-Us',{year:'numeric',month:'short',day:'numeric'})}
-                                </div>
+                            <div className="del-date">
+                             <div style={{ display: 'flex', alignItems: 'center' }}>
+                               <FiberManualRecordIcon style={{ fontSize: '100%', color: '#26A541', marginRight: '5px' }} />
+                               Delivered on {new Date(item.deliveredOn).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                             </div>
+                            </div>
                                 <div className="odr-dis">your item has been delivered</div>
                             </div>
                         </div>

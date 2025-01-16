@@ -24,7 +24,9 @@
   justify-content: space-between;
   width: 260px;
   /* background-color: #fff; */
-  border: 0.5px solid #ddd;
+  /* border: 0.5px solid #ddd; */
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
   overflow: hidden;
   position: relative;
   /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
@@ -41,9 +43,9 @@
   height: 70%; 
   width: 100%;
   overflow: hidden;
-  border: 0.1px solid rgb(230, 228, 228);
+  /* border: 0.1px solid rgb(230, 228, 228); */
   background-color:#fff;
-  border-collapse: collapse;
+  border-bottom: 1px solid rgba(234, 234, 234, 0.893);
 }
 
 .imge {

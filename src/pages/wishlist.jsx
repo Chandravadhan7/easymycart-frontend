@@ -53,7 +53,7 @@ export default function Wishlist() {
       //   })}
       // </div>
       <div className="wishlist-container">
-      <h1 className="wishlist-title">My Wishlist</h1>
+      <h1 className="wishlist-title">My Wishlist<span style={{marginLeft:'1.5%',fontSize:'90%',fontWeight:'50',color:'#999999'}}>{wishlist.length+" Items"}</span></h1>
       {wishlist && wishlist.length > 0 ? (
         <div className="wishlist-grid">
           {wishlist.map((item) => (

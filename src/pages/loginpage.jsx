@@ -48,6 +48,7 @@ export default function Login() {
         console.log('User received from backend:', loginResponseDto);
         localStorage.setItem('sessionId', loginResponseDto.sessionId);
         localStorage.setItem('userId', loginResponseDto.userId);
+        localStorage.setItem('userName',username);
         navigate('/home');
         // if (user && user.userName === username ) {
         //     if( user.password === password){

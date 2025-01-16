@@ -1,21 +1,25 @@
 .order{
     display: flex;
     flex-direction: column;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     width: 60%;
     height: 100%;
     margin: 2% 5% 0 15%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+    background-color: rgb(252, 253, 253);
 }
 .order-tile{
-    width:90%;
+    width:97.8%;
     height:20%;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     align-items: end;
     padding-left: 2%;
     text-align: left;
     line-height: 300%;
     font-size: 200%;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #fff;
+   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 }
 .orders{
     width: 95%;
@@ -29,12 +33,12 @@
 .orchid{
    height: 8rem;
    width:100%;
-   border: 1px solid black;
+   /* border: 1px solid black; */
    display: flex;
    text-decoration: none;
-   color: black;
-   transition: transform 0.2s ease-in-out;
-   box-shadow: 0 1rem 1rem 0 rgb(230, 229, 229);
+   color: black; 
+   background-color: #fff;
+   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 }
 .orchid:hover{
    transform:scale(1.01);
@@ -67,6 +71,8 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
 }
 .odr-tdp1{
     width: 80%;
@@ -101,8 +107,13 @@
     gap:8%;
 }
 .del-date{
-  font-family:Verdana, Geneva, Tahoma, sans-serif
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 85%;
+  font-weight: 550;
 }
 .odr-dis{
-    font-size: 80%;
+    font-size: 70%;
+    text-align: left;
+    margin-left: 7%;
+    color: gray;
 }

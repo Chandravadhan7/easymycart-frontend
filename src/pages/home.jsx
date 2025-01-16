@@ -115,17 +115,20 @@ export default function Home() {
         Shop by Category
       </div>
       <div className='box22'>
-      <button onClick={() => scrollLeft(scrollRef1)} className="scroll-btn left">
+      <button onClick={() => scrollLeft(scrollRef1)} className="scroll-btnn left">
         &#8249;
       </button>
       <div className="box221" ref={scrollRef1}>
       {category.map((item) => (
         <Link to={`/product/category's/${item.id}`} className="cat-box" key={item.id}>
-          {item.title}
+          <div className='cat-box-image-cont'>
+          <img src={item.imageUrl} alt={item.title} className='cat-box-image'/>
+          <div className='cat-box-title'>{item.title}</div>
+          </div>
         </Link>
       ))}
     </div>
-    <button onClick={() => scrollRight(scrollRef1)} className="scroll-btn right">
+    <button onClick={() => scrollRight(scrollRef1)} className="scroll-btnn right">
         &#8250;
       </button>
       </div>
@@ -133,7 +136,7 @@ export default function Home() {
      <div className='box3'>
       <div className='box31'>Featured Products</div>
       <div className='box32'>
-        <button onClick={() => scrollLeft(scrollRef2)} className='scroll-btn left'>
+        <button onClick={() => scrollLeft(scrollRef2)} className='scroll-btnn left'>
           &#8249;
           </button>
       <div className='box321' ref={scrollRef2}>
@@ -142,7 +145,7 @@ export default function Home() {
         <div className='fet-box'></div>
         <div className='fet-box'></div>
       </div>
-      <button onClick={() => scrollRight(scrollRef2)} className='scroll-btn right'>
+      <button onClick={() => scrollRight(scrollRef2)} className='scroll-btnn right'>
       &#8250;
       </button>
      </div>

@@ -1,13 +1,25 @@
 .wishlist-container {
-    padding: 1rem 5rem 0 8rem;
-  }
+  margin: 1rem 5rem 0 8rem;
+  /* border: 1px solid black; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(252, 253, 253);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+ }
   
   .wishlist-title {
-    font-size: 24px;
+    font-size: 150%;
+    padding: 1%;
     font-weight: bold;
     margin-bottom: 3%;
     margin-top: 2%;
     text-align: left;
+    background-color: #fff;
+   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+    width: 93%;
+
   }
   
   .wishlist-grid {
@@ -15,6 +27,7 @@
     flex-wrap: wrap;
     gap: 4rem;
     justify-content: flex-start;
+    width: 95%;
   }
   
   .wishlist-empty {

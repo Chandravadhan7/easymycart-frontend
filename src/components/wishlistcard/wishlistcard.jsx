@@ -48,12 +48,12 @@ export default function WishListCard({ wishListItem }) {
       <div className="contents1">
         <div className="title">{wishListItem?.title}</div>
         <div className="price-section">
-          <span className="prce">Rs.{wishListItem?.price}</span>
+          <span className="prce">Rs.{wishListItem?.sellingPrice}</span>
           {wishListItem?.originalPrice && (
             <span className="original-price">Rs.{wishListItem?.originalPrice}</span>
           )}
           {wishListItem?.discount && (
-            <span className="discount">{wishListItem?.discount} OFF</span>
+            <span className="discount">({wishListItem?.discount}%OFF)</span>
           )}
         </div>
       </div>

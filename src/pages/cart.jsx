@@ -98,6 +98,7 @@ import {userAddress} from './fetchUserAddress';
 import "./cart.css";
 import Modal from "../components/modal/modal"
 import CategoryBar from '../components/caterogybar/categorybar';
+import { setSelectedAddress } from '../store/slices/selectAddress';
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -111,11 +112,22 @@ export default function Cart() {
   let [flatNumber,setFlatNumber] = useState('');
   let [area,setArea] = useState('');
   let [village,setVillage] = useState('');
+
+  const handleSelectedAddress = (address) => {
+    dispatch(setSelectedAddress(address));
+  }
   
   const cart = useSelector((state) => state.cart);
   console.log(cart)
   const addresses = useSelector((state) => state.address);
   console.log(addresses);
+
+  const select = useSelector((state) => state.selectAddress);
+  useEffect(() => {
+    if (select) {
+      console.log("Selected Address:", select);
+    }
+  }, [select]);
 
   // Calculate total amount in the cart
   const totalCart = useMemo(() => {
@@ -263,7 +275,7 @@ export default function Cart() {
       {/* Left Section */}
       <div className="cart-items">
         <div className='address-bar'>
-          <div className='address-details'></div>
+          <div className='address-details'>{select?.fullName}</div>
           <div className='address-btn'>
             <button className='chng-btn' onClick={handleOpenModal}>change</button>
             <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
@@ -273,6 +285,12 @@ export default function Cart() {
               {addresses.map((item) => {
                 return(
                   <div className='add1'>
+                    <input
+                type="radio"
+                name="address"
+                checked={select?.id === item.id}
+                onChange={() => handleSelectedAddress(item)}
+              />
                     <div>{item.fullName} ,</div>
                     <div>Door No:-{item.flatNumber} ,</div>
                     <div> {item.area} ,</div>

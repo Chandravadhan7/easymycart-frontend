@@ -63,7 +63,7 @@ export default function Order(){
            <div className="orders">
              {orders.map((item) =>{
                 return(
-                    <Link to={`/orders/${item?.cartId}`} className="custom-link">
+                    <Link to={`/orders/${item?.cartId}/${item?.addressId}`} className="custom-link">
                     <div className="orchid">
                         <div className="order-child-img">
                             <img src={item?.firstProduct?.image} className="image-Cont"/>

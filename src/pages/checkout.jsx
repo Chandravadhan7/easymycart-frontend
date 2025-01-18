@@ -8,6 +8,8 @@ export default function Checkout(){
     let dispatch = useDispatch();
     let cart = useSelector((state) => state.cart);
 
+    let selectedAddressid = localStorage.getItem("selectAddress")
+
     async function placeOrder() {
         let sessionKey = localStorage.getItem('sessionId');
         let userId = localStorage.getItem('userId');
@@ -19,7 +21,7 @@ export default function Checkout(){
             sessionId:sessionKey,
             userId:userId,
           },
-        }),fetch(`http://localhost:8080/order/${cartId}`,{
+        }),fetch(`http://localhost:8080/order/${cartId}?address_id=${selectedAddressid}`,{
             method:'POST',
             credentials:'include',
           headers:{

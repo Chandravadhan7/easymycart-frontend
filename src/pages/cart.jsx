@@ -97,8 +97,6 @@ import { fetchCartItems } from './fetchCartItems';
 import {userAddress} from './fetchUserAddress';
 import "./cart.css";
 import Modal from "../components/modal/modal"
-import CategoryBar from '../components/caterogybar/categorybar';
-import { setSelectedAddress } from '../store/slices/selectAddress';
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -112,23 +110,50 @@ export default function Cart() {
   let [flatNumber,setFlatNumber] = useState('');
   let [area,setArea] = useState('');
   let [village,setVillage] = useState('');
+  let [landMark,setLandMark] = useState('');
+  let [district,setDistrict] = useState('');
+  let [state,setState] = useState('');
+  let [selectedAddress,setSelectedAddress] = useState(null);
+  const [selectAddressId, setSelectAddressId] = useState(localStorage.getItem("selectAddress"));
 
-  const handleSelectedAddress = (address) => {
-    dispatch(setSelectedAddress(address));
+  
+  const handleSelectAddress = (address) =>{
+    localStorage.setItem("selectAddress",address.id);
+    setSelectAddressId(address.id);
+    window.location.reload(); 
   }
+  
+  // let selectAddressId = localStorage.getItem("selectAddress");
+
+  const getAddress = async () => {
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
+    const response = await fetch(`http://localhost:8080/address/${selectAddressId}`,{
+      method:'GET',
+      headers:{
+        'Content-Type': 'application/json',
+        sessionId:sessionKey,
+        userId:userId
+      },
+    })
+    if(!response.ok){
+      console.log("error occured");
+    }
+    const data = await response.json();
+    setSelectedAddress(data);
+    console.log(data);
+  }
+
+  useEffect(()=>{
+     getAddress();
+  },[]);
   
   const cart = useSelector((state) => state.cart);
   console.log(cart)
   const addresses = useSelector((state) => state.address);
   console.log(addresses);
 
-  const select = useSelector((state) => state.selectAddress);
-  useEffect(() => {
-    if (select) {
-      console.log("Selected Address:", select);
-    }
-  }, [select]);
-
+ 
   // Calculate total amount in the cart
   const totalCart = useMemo(() => {
     return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -173,32 +198,7 @@ export default function Cart() {
   useEffect(() => {
     dispatch(userAddress());
   },[]);
-  // Handle place order logic
-  const placeOrder = async () => {
-    const sessionKey = localStorage.getItem('sessionId');
-    const userId = localStorage.getItem('userId');
-    
-    try {
-      const response = await fetch(`http://localhost:8080/cart/${cartId}/status`, {
-        method: 'PATCH',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          sessionId: sessionKey,
-          userId: userId,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update cart status');
-      }
-
-      console.log("Order placed successfully");
-    } catch (error) {
-      console.error('Error placing order:', error);
-      setErrorMessage('Failed to place your order. Please try again.');
-    }
-  };
+  
 
   // Render UI
   if (errorMessage) {
@@ -212,7 +212,7 @@ export default function Cart() {
     );
   }
 
-  const inputobj = {fullName,phone,pinCode,flatNumber,area,village};
+  const inputobj = {fullName,phone,pinCode,flatNumber,area,village,landMark,district,state};
   const saveAddress = async function(){
     if(!validate()) return;
     let sessionKey = localStorage.getItem('sessionId');
@@ -268,6 +268,16 @@ export default function Cart() {
     if(!village){
       isValid = false;
     }
+    if(!landMark){
+      isValid = false;
+    }
+    if(!district){
+      isValid = false;
+    }
+    if(!state){
+      isValid = false;
+    }
+
   }
   if (cart && cart.length > 0) {
     return (
@@ -275,7 +285,12 @@ export default function Cart() {
       {/* Left Section */}
       <div className="cart-items">
         <div className='address-bar'>
-          <div className='address-details'>{select?.fullName}</div>
+          <div className='address-details'>
+            <div className='add-det'>
+              <div className='add-det1'><span style={{fontFamily:'Inter, -apple-system, Helvetica, Arial, sans-serif'}}>Deliver to:</span> {selectedAddress?.fullName},{selectedAddress?.pinCode}</div>
+              <div className='add-det2'>{selectedAddress?.flatNumber},{selectedAddress?.area},{selectedAddress?.village}</div>
+            </div>
+          </div>
           <div className='address-btn'>
             <button className='chng-btn' onClick={handleOpenModal}>change</button>
             <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
@@ -284,13 +299,7 @@ export default function Cart() {
                 <div className='dis'>Select a delivery location to see product availability and delivery options</div>
               {addresses.map((item) => {
                 return(
-                  <div className='add1'>
-                    <input
-                type="radio"
-                name="address"
-                checked={select?.id === item.id}
-                onChange={() => handleSelectedAddress(item)}
-              />
+                  <div className='add1' onClick={(e) => {e.stopPropagation();handleSelectAddress(item)}}>
                     <div>{item.fullName} ,</div>
                     <div>Door No:-{item.flatNumber} ,</div>
                     <div> {item.area} ,</div>
@@ -302,8 +311,8 @@ export default function Cart() {
               </div>
               <div>Add address <button onClick={handleOpenFormModal}>+</button></div>
             </Modal>
-            <Modal isOpen={isModalFormOpen} onClose={handleCloseFormModal} >
-                <form  className='add-address'>
+            <Modal isOpen={isModalFormOpen} onClose={handleCloseFormModal}>
+                <form  className='add-address' >
                   <div className='add-address1'>
                   <label>Full Name:</label>
                   <input value = {fullName} className = 'add-addressfield' placeholder='Full Name' onChange={(e) => {setFullName(e.target.value)}} required />
@@ -315,6 +324,9 @@ export default function Cart() {
                   <div className='add-address1'>
                   <label>Pin Code:</label>
                   <input value = {pinCode} className = 'add-addressfield' placeholder='pin code' onChange={(e) => {setPincode(e.target.value)}} required/>
+                  <label>Flat Number:</label>
+                  <input value = {flatNumber} className = 'add-addressfield' placeholder='Flat No.' onChange={(e) => {setFlatNumber(e.target.value)}} required/>
+                  
                   </div>
                   <div className='add-address1'>
                   <label>Flat Number:</label>
@@ -327,6 +339,18 @@ export default function Cart() {
                   <div className='add-address1'>
                   <label>Village/Town:</label>
                   <input value = {village} className = 'add-addressfield' placeholder='village' onChange={(e) => {setVillage(e.target.value)}} required/>
+                  </div>
+                  <div className='add-address1'>
+                  <label>Landmark:</label>
+                  <input value = {landMark} className = 'add-addressfield' placeholder='landmark' onChange={(e) => {setLandMark(e.target.value)}} required/>
+                  </div>
+                  <div className='add-address1'>
+                  <label>District:</label>
+                  <input value = {district} className = 'add-addressfield' placeholder='district' onChange={(e) => {setDistrict(e.target.value)}} required/>
+                  </div>
+                  <div className='add-address1'>
+                  <label>state:</label>
+                  <input value = {state} className = 'add-addressfield' placeholder='village' onChange={(e) => {setState(e.target.value)}} required/>
                   </div>
                   <button className='add-address-btn' onClick={saveAddress}>save address</button>
                 </form>

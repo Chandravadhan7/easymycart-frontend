@@ -64,7 +64,7 @@ export default function CartCard({ cartitem }) {
         <img src={cartitem.image} alt={cartitem.name} />
         <Quantity cartItem={cartitem}/>
       </div>
-    <div className="cart-item-details">
+    <div className="cart-item-detail">
       <div className='cart-item-details1'>{cartitem.title}</div>
       <div className='cart-item-details2'>{cartitem.description}</div>
       <div className='cart-item-details2'></div>

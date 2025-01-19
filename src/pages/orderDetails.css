@@ -1,39 +1,67 @@
 .total-cont{
-  width: 80%;
-  margin-left:10% ;
+  width: 75%;
+  margin-left:10%;
   margin-right: 10%;
-  border: 1px solid black;
+  margin-top: 2%;
+  /* border: 1px solid black; */
   display: flex;
-  gap:4%
+  gap:4%;
+  padding-left: 2%;
+  padding-right: 2%;
 }
 .pro-orders{
   width: 66%;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
+  display: flex;
+  flex-direction: column;
+  /* gap:3%; */
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+}
+.item-title{
+  height: 100px;
+  /* border: 1px solid yellow; */
+  width: 100%;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+  display: flex;
+  flex-direction: column;
 }
 .del-address{
     width: 30%;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
 }
 .del-address1{
-    height: 20rem;
+    height: 15rem;
     width: 100%;
-    border: 1px solid red;
-    margin-top: 20%;
+    /* border: 1px solid red; */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
+    align-items: center;
+    background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 }
 .del-address11{
-    height: 10%;    
-    border: 1px solid red;
+    height: 13%;
+    width: 90%;    
+    /* border: 1px solid red; */
+    text-align: left;
+    font-weight: 550;
+    text-transform: capitalize;
 }
 .del-address12{
    height: 30%;
-   border: 1px solid red;
-
+   width: 90%; 
+   /* border: 1px solid red; */
+   text-align: left;
+   line-height: 140%;
+   font-size: 90%;
+   text-transform: capitalize;
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .del-address13{
    height: 10%;
-   border: 1px solid red;
-
+   width: 90%; 
+   /* border: 1px solid red; */
+   text-align: left;
+   font-family:sans-serif;
 }

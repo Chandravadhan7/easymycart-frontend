@@ -84,7 +84,7 @@ body {
     height: 100%;
   }
   .add-det{
-    width:60%;
+    width:50%;
     /* border: 1px solid black; */
     height: 100%;
     display: flex;
@@ -107,6 +107,9 @@ body {
     line-height: 180%;
     color: rgb(156, 155, 155);
     text-transform: capitalize;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .address-btn{
     width: 10%;

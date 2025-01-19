@@ -12,11 +12,12 @@ import Login from './pages/loginpage';
 import Order from './pages/order';
 import OrderDetails from './pages/orderDetails';
 import CategoryBar from './components/caterogybar/categorybar';
+import Products from './pages/products';
 
 function App() {
   let location = useLocation();
 
-  const showCategoryBarPaths = ['/cart', '/wishlist', '/orders',"/product/category's/"];
+  const showCategoryBarPaths = ['/cart', '/wishlist', '/orders',"/product/category's/","/product"];
 
   const shouldShowCategoryBar = showCategoryBarPaths.some((path) =>
     location.pathname.startsWith(path)
@@ -31,6 +32,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/product/category's/:id" element={<Category />} />
+        <Route path="/product" element={<Products/>}/>
         <Route path="/product/:id" element={<Details />} />
         <Route path="/checkoutpage" element={<Checkout/>}/>
         <Route path="/login" element={<Login/>}/>

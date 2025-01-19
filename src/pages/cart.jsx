@@ -288,7 +288,7 @@ export default function Cart() {
           <div className='address-details'>
             <div className='add-det'>
               <div className='add-det1'><span style={{fontFamily:'Inter, -apple-system, Helvetica, Arial, sans-serif'}}>Deliver to:</span> {selectedAddress?.fullName},{selectedAddress?.pinCode}</div>
-              <div className='add-det2'>{selectedAddress?.flatNumber},{selectedAddress?.area},{selectedAddress?.village}</div>
+              <div className='add-det2'>{selectedAddress?.flatNumber},{selectedAddress?.area},{selectedAddress?.village},{selectedAddress?.district},{selectedAddress?.state}</div>
             </div>
           </div>
           <div className='address-btn'>

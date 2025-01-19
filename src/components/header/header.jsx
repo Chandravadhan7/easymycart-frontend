@@ -9,6 +9,8 @@ import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import Person4SharpIcon from '@mui/icons-material/Person4Sharp';
 import { useState } from 'react';
 export default function Header() {
+  let [searchValue,setSearchValue] = useState("");
+  console.log(searchValue);
   let navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const logout = async () =>{
@@ -43,12 +45,24 @@ export default function Header() {
   };
   const sessionId = localStorage.getItem("sessionId");
   const username = localStorage.getItem("userName");
+
+  const handleSubmit = () => {
+    if(searchValue.trim() !== ""){
+      navigate(`/product?query=${encodeURIComponent(searchValue)}`)
+    }
+  }
+
+  const handleEnter = (e) => {
+    if(e.key === 'Enter'){
+      handleSubmit();
+    }
+  };
   return (
     <div className="head">
       <div className="head1">EasyMyCart</div>
       <div className='searchbar'>
-        <input  placeholder='search' className='bar'/>
-        <SearchRoundedIcon className='icon'/>
+        <input  placeholder='search' value={searchValue} onChange={(e)=>{setSearchValue(e.target.value)}} onKeyDown={(e) =>{handleEnter(e)}} className='bar'/>
+        <SearchRoundedIcon className='icon' onClick={ () => {handleSubmit()}}/>
       </div>
       <Link to='/wishlist' className='custom-link'><div className="head2">
         <div className="entity"><FavoriteIcon fontSize="large"/>wishlist</div>

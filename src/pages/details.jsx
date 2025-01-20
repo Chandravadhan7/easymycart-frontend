@@ -318,12 +318,15 @@ export default function Details() {
           </div>
         </div>
         <div className="det2">
-        <div className="ctry">{productDetails?.category}</div>
+          <div className='det21'>
+        <div className="ctry">Men Clothing</div>
           <div className="ttl">{productDetails?.title}</div>
           <div className="rating2">
             <div style={{ fontWeight: 'bolder' }}>{productDetails?.rating?.score}</div>
             <div><StarIcon fontSize='smaller' style={{color:'green'}}/>| {productDetails?.rating?.rate_count} Ratings</div>
           </div>
+          </div>
+          <div className='det22'>
           <div className="money">
             <div>₹{productDetails?.sellingPrice}</div>
             <div className='mrp'>MRP <span style={{textDecoration:'line-through'}}>₹{productDetails?.originalPrice}</span></div>
@@ -356,6 +359,18 @@ export default function Details() {
                 ? 'Wishlisted'
                 : 'Wishlist'}
             </button>
+          </div>
+          </div>
+          <div className='det23'>
+          <div className="mone">
+            <div >₹{productDetails?.sellingPrice}</div>
+            <div ><span style={{textDecoration:'line-through',color:'gray'}}>₹{productDetails?.originalPrice}</span></div>
+            <div style={{color:'orange'}}>({productDetails?.discount}% OFF)</div>
+            </div>
+            <div className='div-date'></div>
+          </div>
+          <div className='det24'>
+
           </div>
         </div>
       </div>

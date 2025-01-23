@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './details.css';
 import StarIcon from '@mui/icons-material/Star';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ProductCard from '../components/productcard/productcard';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ export default function Details() {
   let [categoryproducts, setCategoryProducts] = useState([]);
   let [cartDetails, setCartDetails] = useState(null);
   let [wishlistDetails, setWishlistDetails] = useState(null);
+  let [reviews,setReviews] = useState([]);
   let dispatch = useDispatch();
   let navigate = useNavigate();
   const scrollContainerRef1 = useRef(null);
@@ -174,7 +176,32 @@ export default function Details() {
         console.error('Error fetching product or rating:', error);
       });
   }, [param.id]);
+  const getReviws = async () =>{
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
+    if(productDetails?.rating_id){
+    const response  = await fetch(`http://localhost:8080/product/ratings/${productDetails?.rating_id}`,{
+      method:'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        sessionId: sessionKey,
+        userId: userId,
+      },
+    })
   
+    if(!response.ok){
+      console.log("error in fetching reviews");
+    }
+  
+    const data = await response.json();
+    setReviews(data);
+    console.log("reviews",data);
+    }
+  }
+
+  useEffect(()=>{
+    getReviws();
+  },[productDetails?.rating_id])
 
   async function handleAddToCart() {
     try {
@@ -305,6 +332,9 @@ export default function Details() {
 
   function handleRemoveFromWishlist() {}
 
+  const currentDate = new Date();
+  const futureDate = new Date();
+  futureDate.setDate(currentDate.getDate()+2);
   return (
     <div className="whole-cont">
       <div className="details">
@@ -365,26 +395,39 @@ export default function Details() {
           <div className="mone">
             <div >₹{productDetails?.sellingPrice}</div>
             <div ><span style={{textDecoration:'line-through',color:'gray'}}>₹{productDetails?.originalPrice}</span></div>
-            <div style={{color:'orange'}}>({productDetails?.discount}% OFF)</div>
+            <div style={{color:'green'}}>({productDetails?.discount}% OFF)</div>
             </div>
-            <div className='div-date'></div>
+            <div className='div-date'>Get it by {futureDate.toLocaleDateString("en-US",{weekday:'short',day:'2-digit',month:'short'})}</div>
           </div>
           <div className='det24'>
+             <div className='det241'>
+              <div style={{width:'100%',height:'33%',fontSize:'200%',textAlign:'left'}}>Ratings & Reviews</div>
+              <div style={{width:'100%',height:'25%',display:'flex'}}>
+                <div style={{width:'6%',fontSize:'150%',textAlign:'left'}}>{productDetails?.rating?.score}</div>
+                <div style={{width:'5%',textAlign:'left'}}><StarIcon fontSize='medium'/></div>
+              </div>
+              <div style={{width:'100%',height:'10%',textAlign:'left',fontSize:'80%',color:'gray'}}>{productDetails?.rating?.rate_count} Ratings</div>
+             </div>
+             <div className='det242'>
+              {reviews.map((item)=>{
+                return(
+                  <div className='review-card'>
+                    <div style={{height:'20%',width:'6%',textAlign:'left',display:'flex',backgroundColor:'rgb(40, 164, 40)',color:'#fff',justifyContent:'center'}}><div style={{lineHeight:'100%',width:'30%'}}>{item.stars}</div> <div style={{width:'50%'}}><StarIcon fontSize='xxl-smaller'/></div></div>
+                    <div style={{height:'20%',width:'95%',overflow:'hidden',textAlign:'left',fontWeight:'200'}}>{item.comment}</div>
+                    <div style={{height:'20%',width:'95%',textAlign:'left',fontSize:'80%',color:'gray',display:'flex',gap:'2%'}}>
+                      <div>{item.reviewerName}</div>
+                      <div style={{display:'flex'}}><div style={{lineHeight:'160%'}}><CheckCircleIcon fontSize='smaller'/></div> <div>Certified Buyer</div></div>
+                      <div>{new Date(item.reviewDate).toLocaleDateString("en-US",{month:'short',year:'numeric'})}</div>
+                      </div>
 
+                  </div>
+                )
+              })}
+             </div>
           </div>
         </div>
       </div>
-      {/* <div className="samecat">
-        {categoryproducts.map((item) => {
-          return (
-            <div className="procont">
-              <Link to={`/product/${item.id}`}>
-                <ProductCard product={item} />
-              </Link>
-            </div>
-          );
-        })}
-      </div> */}
+    
       <div className="scroll-wrapper">
       <button className="scroll-btn left" onClick={() => scrollLeft(scrollContainerRef1)}>
         &#8249;

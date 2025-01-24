@@ -6,9 +6,7 @@ import './home.css';
 export default function Category() {
   let [products, setProducts] = useState([]);
   let [category, setCategory] = useState([]);
-
   let param = useParams();
-
   useEffect(() => {
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
@@ -29,14 +27,13 @@ export default function Category() {
         return response.json(); // Parse the array of products
       })
       .then((productArray) => {
-        // Map through the products and fetch ratings where applicable
         return Promise.all(
           productArray.map((product) => {
+            const promises = [];
+  
             if (product.rating_id) {
-              // Fetch rating for products with a `rating_id`
-              return fetch(
-                `http://localhost:8080/product/rating/${product.rating_id}`,
-                {
+              promises.push(
+                fetch(`http://localhost:8080/product/rating/${product.rating_id}`, {
                   method: 'GET',
                   credentials: 'include',
                   headers: {
@@ -44,34 +41,63 @@ export default function Category() {
                     sessionId: sessionKey,
                     userId: userId,
                   },
-                }
-              )
-                .then((ratingResponse) => {
-                  if (!ratingResponse.ok) {
-                    throw new Error(
-                      `Rating HTTP error! Status: ${ratingResponse.status}`
-                    );
-                  }
-                  return ratingResponse.json(); // Parse the rating
                 })
-                .then((ratingData) => {
-                  // Add the rating to the product
-                  return { ...product, rating: ratingData };
-                });
+                  .then((ratingResponse) => {
+                    if (!ratingResponse.ok) {
+                      throw new Error(
+                        `Rating HTTP error! Status: ${ratingResponse.status}`
+                      );
+                    }
+                    return ratingResponse.json(); // Parse the rating
+                  })
+                  .then((ratingData) => {
+                    product.rating = ratingData; // Add the rating to the product
+                  })
+              );
             }
-            // If no rating_id, return the product as is
-            return product;
+  
+            if (product.category_id) {
+              promises.push(
+                fetch(
+                  `http://localhost:8080/product/category/${product.category_id}`,
+                  {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      sessionId: sessionKey,
+                      userId: userId,
+                    },
+                  }
+                )
+                  .then((categoryResponse) => {
+                    if (!categoryResponse.ok) {
+                      throw new Error(
+                        `Category HTTP error! Status: ${categoryResponse.status}`
+                      );
+                    }
+                    return categoryResponse.json(); // Parse the category
+                  })
+                  .then((categoryData) => {
+                    product.category = categoryData; // Add the category to the product
+                  })
+              );
+            }
+  
+            // Wait for all promises (rating/category) to resolve and return the updated product
+            return Promise.all(promises).then(() => product);
           })
         );
       })
       .then((finalProducts) => {
-        console.log('Final Products with Ratings:', finalProducts);
+        console.log('Final Products with Ratings and Categories:', finalProducts);
         setProducts(finalProducts); // Set the final array to state
       })
       .catch((error) => {
-        console.error('Error fetching products or ratings:', error);
+        console.error('Error fetching products or ratings/categories:', error);
       });
-  }, [param.id]); 
+  }, [param.id]);
+   
   
   useEffect(function () {
     let sessionKey = localStorage.getItem('sessionId');

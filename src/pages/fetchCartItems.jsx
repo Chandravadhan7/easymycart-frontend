@@ -29,7 +29,8 @@ export const fetchCartItems = (cartId) => async (dispatch) => {
           sessionId: sessionKey,
           userId: userId,
         },
-      }).then((resp) => resp.json()),
+      }).then((resp) => resp.json())
+      .then((resp) => ({...resp,quantity:item.quantity}))
     );
 
     const cartProducts = await Promise.all(productPromises);

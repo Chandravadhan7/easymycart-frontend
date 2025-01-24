@@ -106,6 +106,7 @@ export default function Quantity({ cartItem }) {
       console.error('Error decrementing quantity:', err);
     }
   }
+  
 
   async function handleRemoveFromCart() {
     const productId = cartItem.id;
@@ -141,13 +142,14 @@ export default function Quantity({ cartItem }) {
         <span>Loading...</span>
       ) : cartDetails ? (
         <div className='quantityy'>
-          <button onClick={increment} disabled={cartDetails.quantity >= 10} className='plus'>
+          <button onClick={() => {window.location.reload();increment();}} disabled={cartDetails.quantity >= 10} className='plus'>
             +
           </button>
           <span className='num'>{cartDetails.quantity}</span>
           <button
-            onClick={
-              cartDetails.quantity > 1 ? decrement : handleRemoveFromCart
+            onClick={() => {window.location.reload();
+              cartDetails.quantity > 1 ? decrement() : handleRemoveFromCart()
+            }
             }
             disabled={cartDetails.quantity <= 0}
           className='plus'>

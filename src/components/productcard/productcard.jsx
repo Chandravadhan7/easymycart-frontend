@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
         <div><StarIcon fontSize='smaller' style={{color:'green'}}/>| {product?.rating?.rate_count} </div>
       </div>
       <div className="contents">
-        <div className='cat'>Men's clothing</div>
+        <div className='cat'>{product?.category?.title}</div>
         <div className='name'>{product.title}</div>
         <div className='prce'>
           <div>Rs.{product.sellingPrice}</div>

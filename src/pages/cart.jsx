@@ -155,9 +155,13 @@ export default function Cart() {
 
  
   // Calculate total amount in the cart
-  const totalCart = useMemo(() => {
-    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const totalOriginalPrice = useMemo(() => {
+    return cart.reduce((acc, item) => acc + item.originalPrice * item.quantity, 0);
   }, [cart]);
+
+  const totalSellingPrice = useMemo(() => {
+    return cart.reduce((acc,item) => acc + item.sellingPrice * item.quantity , 0);
+  },[cart])
 
   // Fetch cart entity details
   useEffect(() => {
@@ -370,11 +374,11 @@ export default function Cart() {
         <h3>PRICE DETAILS</h3>
         <div className="summary-line">
           <span>Price</span>
-          <span>₹{0}</span>
+          <span>₹{totalOriginalPrice}</span>
         </div>
         <div className="summary-line">
           <span>Discount</span>
-          <span>-₹{0}</span>
+          <span>-₹{totalOriginalPrice-totalSellingPrice}</span>
         </div>
         <div className="summary-line">
           <span>Delivery Charges</span>
@@ -382,7 +386,7 @@ export default function Cart() {
         </div>
         <div className="summary-line">
           <span>Total Amount</span>
-          {/* <span>₹{totalPrice - totalSavings}</span> */}
+          <span>₹{totalSellingPrice}</span>
         </div>
         <Link to = '/checkoutpage'><button className="place-order-btn">Place Order</button></Link>
       </div>

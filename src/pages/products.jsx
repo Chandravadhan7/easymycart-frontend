@@ -9,38 +9,66 @@ export default function Products(){
     
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
-    const getProducts = async () =>{
-         return await fetch(`http://localhost:8080/product/api/search?searchValue=${encodeURIComponent(query)}`,{
-            method:'GET',
-            headers:{
-                'Content-Type':'application/json',
+    const getProducts = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/product/api/search?searchValue=${encodeURIComponent(query)}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
             }
-        }).then((response) => {
-            return response.json();
-        }).then((productArray) => {
-            return Promise.all(
-                productArray.map((product) =>{
-                  if(product.rating_id){
-                    return fetch(`http://localhost:8080/product/rating/${product.rating_id}`,{
-                        method:'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            sessionId: sessionKey,
-                            userId: userId,
-                          },
-                    }).then((ratingResponse) => {
-                        return ratingResponse.json();
-                    }).then((ratingData) => {
-                        return {...product,rating:ratingData}
-                    });
+          );
+      
+          const productArray = await response.json();
+      
+          const finalProducts = await Promise.all(
+            productArray.map(async (product) => {
+              let updatedProduct = { ...product };
+      
+              if (product.rating_id) {
+                const ratingResponse = await fetch(
+                  `http://localhost:8080/product/rating/${product.rating_id}`,
+                  {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      sessionId: sessionKey,
+                      userId: userId,
+                    },
                   }
-                  return product;
-                })
-            )
-        }).then((finalProducts) => {
-            setProducts(finalProducts)
-        })
-    }
+                );
+                const ratingData = await ratingResponse.json();
+                updatedProduct = { ...updatedProduct, rating: ratingData };
+              }
+      
+              if (product.category_id) {
+                const categoryResponse = await fetch(
+                  `http://localhost:8080/product/category/${product.category_id}`,
+                  {
+                    method: 'GET',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      sessionId: sessionKey,
+                      userId: userId,
+                    },
+                  }
+                );
+                const categoryData = await categoryResponse.json();
+                updatedProduct = { ...updatedProduct, category: categoryData };
+              }
+      
+              return updatedProduct;
+            })
+          );
+      
+          setProducts(finalProducts);
+        } catch (error) {
+          console.error('Error fetching products:', error);
+        }
+      };
+      
 
     useEffect(()=>{
         if(query){

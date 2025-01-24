@@ -27,7 +27,7 @@ export default function CategoryBar(){
         <div className="cat-bar">
             {category.map((item) => {
                 return(
-                <div className="cat-bar-entities"><Link to={`/product/category's/${item.id}`} className="custom-link">{item.title}</Link></div>
+                <div className="cat-bar-entities" onClick={() => {window.location.reload()}}><Link to={`/product/category's/${item.id}`} className="custom-link">{item.title}</Link></div>
                 )
                }
             )}

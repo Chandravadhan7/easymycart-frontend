@@ -143,7 +143,8 @@ export default function Details() {
       })
       .then((productResponse) => {
         if (productResponse.rating_id) {
-          return fetch(
+        
+           return fetch(
             `http://localhost:8080/product/rating/${productResponse.rating_id}`,
             {
               method: 'GET',
@@ -165,6 +166,24 @@ export default function Details() {
               ...productResponse,
               rating: ratingData,
             }));
+          
+        }
+        if(productResponse.category_id){
+          return fetch(
+            `http://localhost:8080/product/category/${productResponse.category_id}`,
+            {
+              method: 'GET',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+                sessionId: sessionKey,
+                userId: userId,
+              },
+            }
+          ).then((categoryResp) =>{return categoryResp.json();})
+          .then((categoryResp) => {
+            return {...productResponse,category:categoryResp};
+          })
         }
         return productResponse; // No rating_id, return product as is
       })
@@ -349,7 +368,7 @@ export default function Details() {
         </div>
         <div className="det2">
           <div className='det21'>
-        <div className="ctry">Men Clothing</div>
+        <div className="ctry">{productDetails?.category?.title}</div>
           <div className="ttl">{productDetails?.title}</div>
           <div className="rating2">
             <div style={{ fontWeight: 'bolder' }}>{productDetails?.rating?.score}</div>

@@ -13,6 +13,8 @@ import Order from './pages/order';
 import OrderDetails from './pages/orderDetails';
 import CategoryBar from './components/caterogybar/categorybar';
 import Products from './pages/products';
+import Addresses from './pages/addresspage';
+import Addaddress from './pages/Addaddress';
 
 function App() {
   let location = useLocation();
@@ -38,6 +40,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/orders" element={<Order/>}/>
         <Route path="/orders/:cartId/:addressId" element={<OrderDetails/>}/>
+        <Route path="/addresses" element={<Addresses/>}/>
+        <Route path="/add-address" element={<Addaddress/>}/>
       </Routes>
     </div>
   );

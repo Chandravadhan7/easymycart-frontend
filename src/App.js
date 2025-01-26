@@ -19,7 +19,7 @@ import Addaddress from './pages/Addaddress';
 function App() {
   let location = useLocation();
 
-  const showCategoryBarPaths = ['/cart', '/wishlist', '/orders',"/product/category's/","/product"];
+  const showCategoryBarPaths = ['/cart', '/wishlist', '/orders',"/product/category's/","/product","/add-address","/addresses"];
 
   const shouldShowCategoryBar = showCategoryBarPaths.some((path) =>
     location.pathname.startsWith(path)

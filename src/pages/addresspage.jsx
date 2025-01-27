@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { userAddress } from "./fetchUserAddress";
 import "./addresspage.css"
+import AddIcon from '@mui/icons-material/Add';
 export default function Addresses(){
     let dispatch = useDispatch();
 
@@ -15,7 +16,8 @@ export default function Addresses(){
         <div className="cont-add">
            <div className="address-head">Your Addresses</div>
            <div className="address-items-cont">
-            <div className="address-item" style={{border:'1px dashed black'}}><Link to={'/add-address'}>Add Address</Link></div>
+            <Link to={'/add-address'} className="address-item" style={{border:'1px dashed gray'}}><div style={{color:'gray'}}><AddIcon fontSize="large"/></div>
+            <div style={{fontSize:'150%',color:'black'}}>Add Address</div></Link>
             {address.map((item) => {
                 return(
                     <div className="address-item">
@@ -26,7 +28,7 @@ export default function Addresses(){
                       </div>
                       <div className="add-edit">
                         <div style={{height:'60%',width:'96%',display:'flex',gap:'5%'}}>
-                            <div style={{width:'20%',height:'40%',borderRight:'1px solid rgb(2, 91, 143)'}}>Edit</div>
+                            <div style={{width:'20%',height:'40%',borderRight:'1px solid rgb(2, 91, 143)'}}><Link to={`/address/edit/${item.id}`} className="custom-link">Edit</Link></div>
                             <div>Remove</div>
                         </div>
                       </div>

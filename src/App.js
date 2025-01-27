@@ -15,7 +15,8 @@ import CategoryBar from './components/caterogybar/categorybar';
 import Products from './pages/products';
 import Addresses from './pages/addresspage';
 import Addaddress from './pages/Addaddress';
-
+import UpdateAddress from './pages/updatepage';
+import SignUp from './pages/signup';
 function App() {
   let location = useLocation();
 
@@ -24,11 +25,16 @@ function App() {
   const shouldShowCategoryBar = showCategoryBarPaths.some((path) =>
     location.pathname.startsWith(path)
   );
+  const hideHeader = ['/login']
+  const shouldHideHeader = hideHeader.some((path) => 
+    location.pathname.startsWith(path)
+  );
 
   return (
     <div className="App">
-      <Header />
-       {shouldShowCategoryBar && <CategoryBar />}        <Routes>
+      {!shouldHideHeader && <Header />}
+       {shouldShowCategoryBar && <CategoryBar />}        
+       <Routes>
         {/* <Route path="/*" element={<DashBoard />} /> */}
         <Route path="/*" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
@@ -38,10 +44,12 @@ function App() {
         <Route path="/product/:id" element={<Details />} />
         <Route path="/checkoutpage" element={<Checkout/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path='/signup' element={<SignUp/>}/>
         <Route path="/orders" element={<Order/>}/>
         <Route path="/orders/:cartId/:addressId" element={<OrderDetails/>}/>
         <Route path="/addresses" element={<Addresses/>}/>
         <Route path="/add-address" element={<Addaddress/>}/>
+        <Route path="/address/edit/:addressId" element={<UpdateAddress/>}/>
       </Routes>
     </div>
   );

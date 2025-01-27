@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './login.css';
+import Person4Icon from '@mui/icons-material/Person4';
+import KeyIcon from '@mui/icons-material/Key';
+
 
 export default function Login() {
   let [username, setUsername] = useState('');
@@ -70,51 +73,51 @@ export default function Login() {
 
   return (
     <div className="row">
-      <div className="offset-lg-3 col-lg-6">
+      <div className="login-cont">
         <form onSubmit={handleSubmit} className="contain">
           <div className="crd">
             <div className="crd-header">
-              <h2>User Login</h2>
+              Sign In
             </div>
             <div className="crd-body">
               <div className="form-group">
-                <label>
-                  User Name <span className="errmsg">*</span>
-                </label>
+              <div style={{display:'flex',gap:'2%'}}>
+              <div><Person4Icon fontSize='large'/></div>
+          
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="form-control"
-                  placeholder="Enter Username"
-                />
+                  placeholder="Username"
+                /></div>
                 {usernameError && (
                   <div className="error-message">{usernameError}</div>
                 )}
               </div>
               <div className="form-group">
-                <label>
-                  Password <span className="errmsg">*</span>
-                </label>
+              <div style={{display:'flex',gap:'2%'}}>
+              <div><KeyIcon fontSize='large'/></div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="form-control"
-                  placeholder="Enter Password"
-                />
+                  placeholder="Password"
+                /></div>
+                <div style={{width:'95%',height:'30%',textAlign:'right',lineHeight:'250%',color:'#b20f1a'}}>Forget password?</div>
                 {passwordError && (
                   <div className="error-message">{passwordError}</div>
                 )}
               </div>
+              <button type="submit" className="bttn btn-primary">
+                LOGIN
+              </button>
             </div>
             <div className="crd-footer">
-              <button type="submit" className="bttn btn-primary">
-                Login
-              </button>{' '}
-              |
-              <Link className="bttn btn-success" to={'/user/signup'}>
-                New User
+              Don't have an account? {' '}{' '}{' '}
+              <Link  to={'/signup'}>
+                {' '}Sign Up
               </Link>
             </div>
           </div>

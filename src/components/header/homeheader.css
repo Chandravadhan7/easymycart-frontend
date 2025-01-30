@@ -1,0 +1,120 @@
+.head {
+    display: flex;
+    height: 50%;
+    width: 100%;
+    padding: 1rem 0 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    gap: 1rem;
+    background-color: #fff;
+  }
+  .head1 {
+    width: 20%;
+    font-size: 2rem;
+    display: flex;
+    justify-content:end;
+    color: black;
+  }
+  .head2 {
+    width: 8%;
+    display: flex;
+    gap:0.7rem;
+  }
+  .searchbar {
+    display: flex; 
+    align-items: center; 
+    width: 40%; 
+    margin-right: 2rem;
+    position: relative; 
+    border: 1px solid #F0F5FF;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #F0F5FF;
+    transition: all 0.3s ease;
+  }
+  
+  .bar {
+    flex: 1; 
+    border: none; 
+    outline: none; 
+    padding: 10px 15px; 
+    font-size: 16px;
+    border-radius: 20px 0 0 20px; 
+    background-color: #F0F5FF;
+  }
+  
+  .icon {
+    margin-right: 10px; 
+    font-size: 24px; 
+    cursor: pointer;
+    transition: color 0.3s ease; 
+    color: black;
+  }
+  
+  .icon:hover {
+    color: rgb(34, 113, 203); 
+  }
+  
+  
+  .searchbar:focus-within {
+    border: 2px solid rgb(8, 113, 212);
+  }
+  
+  
+  .entity {
+    font-size: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-transform: capitalize;
+    color: black;
+  }
+  .custom-link {
+    text-decoration: none;
+    color: black;
+  }
+  .dropdown-menu {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    width: 15%;
+    height: 18%;
+  }
+  
+  .dropdown-item {
+    cursor: pointer;
+    height: 33%;
+    width: 100%;
+    border-bottom: 1px solid rgb(224, 222, 222);
+    display: flex;
+  }
+  .dropdown-item1{
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    /* border-bottom: 1px solid black; */
+    display: flex;
+    text-decoration: none;
+    color: black;
+  }
+  .dropdown-item-syb{
+     width: 20%;
+     /* border: 1px solid red; */
+     line-height: 300%;
+  }
+  .dropdown-item-text{
+    width: 80%;
+    /* border: 1px solid blue; */
+    text-align: left;
+    line-height: 230%;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f1f1f1;
+  }

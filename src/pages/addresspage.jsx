@@ -28,7 +28,7 @@ export default function Addresses(){
                       </div>
                       <div className="add-edit">
                         <div style={{height:'60%',width:'96%',display:'flex',gap:'5%'}}>
-                            <div style={{width:'20%',height:'40%',borderRight:'1px solid rgb(2, 91, 143)'}}><Link to={`/address/edit/${item.id}`} className="custom-link">Edit</Link></div>
+                            <div style={{width:'20%',height:'40%',borderRight:'1px solid rgb(2, 91, 143)'}}><Link to={`/address/edit/${item.id}`} className="custom-link">EDIT</Link></div>
                             <div>Remove</div>
                         </div>
                       </div>

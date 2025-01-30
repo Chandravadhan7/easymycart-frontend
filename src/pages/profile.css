@@ -1,0 +1,95 @@
+.profile-page{
+    width:100%;
+    height: 100vh;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    gap:1%;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+.page-side1{
+   width: 20%;
+   height: 50%;
+   /* border: 1px solid red; */
+   margin-top: 1.5%;
+   display: flex;
+   flex-direction: column;
+   gap:5%;
+}
+
+.user-name{
+    height: 18%;
+    /* border: 1px solid green; */
+    display: flex;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.user-contents{
+    height: 77%;
+    /* border: 1px solid pink; */
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.user-contents-account{
+   height: 50%;
+   /* border: 1px solid red; */
+   display: flex;
+   flex-direction: column;
+}
+.user-contents-cw{
+    height: 20%;
+     border-bottom: 1px solid rgb(227, 225, 225); 
+    display: flex;
+    cursor: pointer;
+}
+.page-side2{
+    width: 60%;
+    height: 96%;
+    /* border: 1px solid rgb(6, 144, 250); */
+    margin-top: 1.5%;
+    background-color: #fff;
+    display: flex;
+}
+.page-side21{
+   width: 94%;
+   height: 94%;
+   margin: 3%;
+   display: flex;
+   flex-direction: column;
+   gap: 2%;
+}
+.page-side21-add{
+    height: 20%;
+    display: flex;
+    flex-direction: column;
+    gap:10% ;
+    justify-content: center;
+}
+.page-side21-addresses{
+    height: 75%;
+    gap:2%;
+    display: flex;
+    flex-direction: column;
+}
+.page-side21-address{
+    height: 16vh;
+    border: 1px solid rgb(238, 237, 237);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2%;
+    text-align: left;
+    gap:1rem;
+}
+
+.pro-info{
+    height:30%;
+    display:flex;
+    cursor: pointer;
+}
+.pro-info:hover{
+    background-color: rgb(245, 253, 253);
+    color: rgb(10, 101, 239);
+}

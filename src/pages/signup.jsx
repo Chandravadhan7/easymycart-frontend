@@ -49,7 +49,7 @@ export default function SignUp() {
 
     const inputObj = { userName: username, email: email, password: password };
 
-    fetch('http://localhost:8080/user/signup', {
+    fetch('http://localhost:8080/user/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(inputObj),
@@ -60,7 +60,7 @@ export default function SignUp() {
       })
       .then((data) => {
         alert('Account created successfully!');
-        navigate('/user/login');
+        navigate('/login');
       })
       .catch((err) => {
         console.error('Signup error:', err);

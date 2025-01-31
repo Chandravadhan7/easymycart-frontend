@@ -7,13 +7,15 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import LocalMallSharpIcon from '@mui/icons-material/LocalMallSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import Person4SharpIcon from '@mui/icons-material/Person4Sharp';
-import { useState } from 'react';
+import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+
+import { useEffect, useRef, useState } from 'react';
 export default function Header() {
   let [searchValue,setSearchValue] = useState("");
   console.log(searchValue);
   let navigate = useNavigate();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const logout = async () =>{
+ const logout = async () =>{
     try{
       const sessionKey = localStorage.getItem("sessionId");
       
@@ -40,9 +42,7 @@ export default function Header() {
   function handlelogout(){
     logout();
   }
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+ 
   const sessionId = localStorage.getItem("sessionId");
   const username = localStorage.getItem("userName");
 
@@ -57,27 +57,23 @@ export default function Header() {
       handleSubmit();
     }
   };
+
+   
+
   return (
     <div className="head">
       <div className="head1">EasyMyCart</div>
       <div className='searchbar'>
-        <input  placeholder='search' value={searchValue} onChange={(e)=>{setSearchValue(e.target.value)}} onKeyDown={(e) =>{handleEnter(e)}} className='bar'/>
-        <SearchRoundedIcon className='icon' onClick={ () => {handleSubmit()}}/>
+        <SearchRoundedIcon className='icon' />
+        <input  placeholder='Search For Products...' value={searchValue} onChange={(e)=>{setSearchValue(e.target.value)}} onKeyDown={(e) =>{handleEnter(e)}} className='bar'/>
       </div>
-      <Link to='/wishlist' className='custom-link'><div className="head2">
-        <div className="entity"><FavoriteIcon fontSize="large"/>wishlist</div>
-      </div></Link>
-      <Link to='/cart' className='custom-link'>
-      <div className='head2'>
-        
-        <div className='entity'><ShoppingCartIcon fontSize='large' />cart</div>
-      </div></Link>
       {sessionId ? (
         // If logged in, show username with a dropdown
-        <div className="head2" onClick={toggleDropdown}>
+        <div className="head2-user">
+          <div><PersonIcon /></div>
+          <div className="entity" >{"Hello,"+username}</div>
+          <KeyboardArrowDownOutlinedIcon />
           
-          <div className="entity" ><PersonIcon fontSize="large" />{"Hello,"+username}</div>
-          {isDropdownOpen && (
             <div className="dropdown-menu">
                 <div className='dropdown-item'>
                   <Link to="/profile" className='dropdown-item1'>
@@ -90,6 +86,12 @@ export default function Header() {
                   <div className='dropdown-item-syb'><LocalMallSharpIcon/></div>
                   <div className='dropdown-item-text'>Orders</div>
                   </Link>
+                </div>
+                <div className='dropdown-item'>
+                  <Link to="/wishlist" className='dropdown-item1'>
+                  <div className='dropdown-item-syb'><FavoriteIcon /></div>
+                  <div className='dropdown-item-text'>Wishlist</div>
+                  </Link>
                 </div> 
                 <div className='dropdown-item' onClick={handlelogout}>
                   <div className='dropdown-item1'>
@@ -97,9 +99,7 @@ export default function Header() {
                   <div className='dropdown-item-text'>Logout</div>
                 </div>
                 </div>
-                
             </div>
-          )}
         </div>
       ) : (
         // If not logged in, show Login button
@@ -110,6 +110,14 @@ export default function Header() {
           </div>
         </Link>
       )}
+       <Link to='/cart' className='head2'>
+      <div><ShoppingCartIcon /></div>
+        <div className='entity'>cart</div>
+      </Link>
+      <Link to='/wishlist' className='head2'>
+        <FavoriteIcon />
+        <div className="entity">wishlist</div>
+      </Link>    
     </div>
   );
 }

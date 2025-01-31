@@ -52,7 +52,7 @@ export default function Login() {
         localStorage.setItem('sessionId', loginResponseDto.sessionId);
         localStorage.setItem('userId', loginResponseDto.userId);
         localStorage.setItem('userName',username);
-        navigate('/home');
+        navigate('/');
         // if (user && user.userName === username ) {
         //     if( user.password === password){
         //     sessionStorage.setItem('username', user.userName);

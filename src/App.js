@@ -7,7 +7,7 @@ import Details from './pages/details';
 import DashBoard from './pages/dashboard';
 import Cart from './pages/cart';
 import Wishlist from './pages/wishlist';
-import  Checkout  from './pages/checkout';
+import Checkout from './pages/checkout';
 import Login from './pages/loginpage';
 import Order from './pages/order';
 import OrderDetails from './pages/orderDetails';
@@ -19,45 +19,70 @@ import UpdateAddress from './pages/updatepage';
 import SignUp from './pages/signup';
 import HomeHeader from './components/header/homeheader';
 import Profile from './pages/profile';
+
 function App() {
   let location = useLocation();
 
-  const showCategoryBarPaths = ['/cart', '/wishlist', '/orders',"/product/category's/","/product","/add-address","/addresses"];
+  // Pages that should display the Header
+  const headerPaths = [
+    '/cart',
+    '/wishlist',
+    "/product/categories/:id",
+    '/product',
+    '/product/:id',
+    '/checkoutpage',
+    '/orders',
+    '/orders/:cartId/:addressId',
+    '/addresses',
+    '/add-address',
+    '/address/edit/:addressId',
+    '/profile'
+  ];
 
-  const shouldShowCategoryBar = showCategoryBarPaths.some((path) =>
-    location.pathname.startsWith(path)
-  );
-  const hideHeader = ['/login','/']
-  const shouldHideHeader = hideHeader.some((path) => 
-    location.pathname.startsWith(path)
+  const shouldShowHeader = headerPaths.some((path) =>
+    location.pathname.startsWith(path.replace(/:\w+/g, '')) // Handle dynamic params
   );
 
-  const showHomeHeaderBarPaths = ['/'];
-  const shouldshowHomeHeader = hideHeader.some((path) => 
-    location.pathname.startsWith(path)
+  // Pages that should display the CategoryBar
+  const categoryBarPaths = [
+    '/cart',
+    '/wishlist',
+    '/orders',
+    '/product/categories/',
+    '/product',
+    '/add-address',
+    '/addresses'
+  ];
+
+  const shouldShowCategoryBar = categoryBarPaths.some((path) =>
+    location.pathname.startsWith(path.replace(/:\w+/g, ''))
   );
+
+  // Show HomeHeader only on the home page
+  const shouldShowHomeHeader = location.pathname === '/';
+
   return (
     <div className="App">
-      {!shouldHideHeader && <Header />}
-      {shouldshowHomeHeader && <HomeHeader/>}
-       {shouldShowCategoryBar && <CategoryBar />}        
-       <Routes>
-        {/* <Route path="/*" element={<DashBoard />} /> */}
-        <Route path="/" element={<Home />} />
+      {shouldShowHomeHeader && <HomeHeader />}
+      {shouldShowHeader && <Header />}
+      {shouldShowCategoryBar && <CategoryBar />}
+
+      <Routes>
+        <Route path="/*" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/product/category's/:id" element={<Category />} />
-        <Route path="/product" element={<Products/>}/>
+        <Route path="/product" element={<Products />} />
         <Route path="/product/:id" element={<Details />} />
-        <Route path="/checkoutpage" element={<Checkout/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path='/signup' element={<SignUp/>}/>
-        <Route path="/orders" element={<Order/>}/>
-        <Route path="/orders/:cartId/:addressId" element={<OrderDetails/>}/>
-        <Route path="/addresses" element={<Addresses/>}/>
-        <Route path="/add-address" element={<Addaddress/>}/>
-        <Route path="/address/edit/:addressId" element={<UpdateAddress/>}/>
-        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/checkoutpage" element={<Checkout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/orders" element={<Order />} />
+        <Route path="/orders/:cartId/:addressId" element={<OrderDetails />} />
+        <Route path="/addresses" element={<Addresses />} />
+        <Route path="/add-address" element={<Addaddress />} />
+        <Route path="/address/edit/:addressId" element={<UpdateAddress />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

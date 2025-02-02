@@ -1,0 +1,75 @@
+.check-out-parent{
+    display: flex;
+    margin-left: 14%;
+    margin-right: 12%;
+    margin-top: 2%;
+    height: auto;
+    gap:2%;
+}
+.check-out-cont{
+    display: flex;
+    flex-direction: column;
+    width: 68%;
+    gap:2%;
+}
+.login-check{
+    height: 5rem;
+    width:100%;
+    display: flex;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+    background-color: #fff;
+}
+.check-address{
+    height: 6.5rem;
+    width:100%;
+    display: flex;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+    background-color: #fff;
+}
+.chnge-btn{
+    width:70%;
+    height: 50%;
+    background-color: #fff;
+    border: 1px solid rgb(207, 206, 206);
+    border-radius: 3px;
+    font-weight: 550;
+    color: rgb(61, 111, 238);
+    cursor: pointer;
+}
+
+.checkout-pro{
+    display: flex;
+    flex-direction: column;
+}
+.checkout-sum{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 20px;
+    width: 30%; /* Set a fixed width */
+    height: 300px; /* Set a fixed height */
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; /* Spread out content evenly */
+    box-sizing: border-box; 
+}
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    color: #555;
+}
+.place-order-btn {
+    background-color: #fb641b;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}

@@ -97,6 +97,7 @@ import { fetchCartItems } from './fetchCartItems';
 import {userAddress} from './fetchUserAddress';
 import "./cart.css";
 import Modal from "../components/modal/modal"
+import { IoRadioButtonOn, IoRadioButtonOff } from "react-icons/io5";
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -107,11 +108,22 @@ export default function Cart() {
   const [selectAddressId, setSelectAddressId] = useState(localStorage.getItem("selectAddress"));
 
   
-  const handleSelectAddress = (address) =>{
-    localStorage.setItem("selectAddress",address.id);
+  const handleSelectAddress = (address) => {
+    if (!address || !address.id) {
+      console.error("Invalid address selected");
+      return;
+    }
+    localStorage.setItem("selectAddress", address.id);
     setSelectAddressId(address.id);
-    window.location.reload(); 
-  }
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const savedAddressId = localStorage.getItem("selectAddress");
+    if (savedAddressId) {
+      setSelectAddressId(savedAddressId);
+    }
+  }, []);
   
   // let selectAddressId = localStorage.getItem("selectAddress");
 
@@ -230,23 +242,25 @@ export default function Cart() {
           <div className='address-btn'>
             <button className='chng-btn' onClick={handleOpenModal}>change</button>
             <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-              <div className='location'>Choose Location</div>
+              <div className='location'>Select Delivary Address</div>
               <div className='addresses'>
-                <div className='dis'>Select a delivery location to see product availability and delivery options</div>
+                {/* <div className='dis'>Select a delivery location to see product availability and delivery options</div> */}
               {addresses.map((item) => {
                 return(
                   <div className='add1' onClick={(e) => {e.stopPropagation();handleSelectAddress(item)}}>
-                    <div>{item.fullName} ,</div>
-                    <div>Door No:-{item.flatNumber} ,</div>
-                    <div> {item.area} ,</div>
-                    <div>{item.village} ,</div>
-                    <div>{item.pinCode} </div>
+                    <div style={{width:'15%',color:'rgb(10, 101, 239)'}}>
+                    {Number(selectAddressId) === item.id ? <IoRadioButtonOn /> : <IoRadioButtonOff />}
+                    </div>
+                    <div style={{display:'flex',flexDirection:'column',textAlign:'left',gap:'50%',overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>
+                      <div style={{fontWeight:'bold'}}>{item.fullName} ,{item.pinCode} </div>
+                      <div style={{fontSize:'80%',color:'rgb(177, 176, 176)',overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{item.flatNumber} {item.area} ,{item.village} ,{item.district}</div>
+                    </div>
                   </div>
                 )
               })}
               </div>
               {/* <div>Add address <button onClick={handleOpenFormModal}>+</button></div> */}
-              <Link to={'/addresses'}>address</Link>
+              <Link to={'/addresses'} style={{textDecoration:'none',color:'rgb(10, 101, 239)',textAlign:'left',marginLeft:'10%'}}>+ Add an address</Link>
             </Modal>
           </div>
         </div>

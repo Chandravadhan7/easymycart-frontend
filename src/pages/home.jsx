@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import './home.css';
 import { Link, useNavigate } from 'react-router-dom';
-import ProductCard from '../components/productcard/productcard';
 import {Swiper,SwiperSlide} from "swiper/react";
 import {Navigation,Autoplay} from "swiper/modules"
 import "swiper/css"
 import "swiper/css/navigation"
-import CategoryBar from '../components/caterogybar/categorybar';
-import Header from '../components/header/header';
+import StarIcon from '@mui/icons-material/Star';
+
 export default function Home() {
   let [product, setProduct] = useState([]);
+  let [topProducts,setTopProducts] = useState([]);
   let [category, setCategory] = useState([]);
   let navigate = useNavigate();
   let scrollRef1 = useRef(null);
@@ -41,31 +41,112 @@ export default function Home() {
       }
 
   }
-  // useEffect(()=>{
-  //   fetchwithauth();
-  // },[])
-  // useEffect(function () {
-  //   let sessionKey = localStorage.getItem('sessionId');
-  //   let userId = localStorage.getItem('userId');
-  //   fetch('http://localhost:8080/product/', {
-  //     method: 'GET',
-  //     credentials: 'include', // Include session cookies
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       sessionId: sessionKey,
-  //       userId: userId,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       return response.json();
-  //     })
-  //     .then((response) => {
-  //       console.log(response);
-  //       setProduct(response);
-  //     });
-  // }, []);
-
  
+  useEffect(() => {
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
+  
+    fetch(`http://localhost:8080/product/`, {
+      method: 'GET',
+      credentials: 'include', 
+      headers: {
+        'Content-Type': 'application/json',
+        sessionId: sessionKey,
+        userId: userId,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json(); 
+      })
+      .then((productArray) => {
+        return Promise.all(
+          productArray.map((product) => {
+            const promises = [];
+  
+            if (product.rating_id) {
+              promises.push(
+                fetch(`http://localhost:8080/product/rating/${product.rating_id}`, {
+                  method: 'GET',
+                  credentials: 'include',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    sessionId: sessionKey,
+                    userId: userId,
+                  },
+                })
+                  .then((ratingResponse) => {
+                    if (!ratingResponse.ok) {
+                      throw new Error(
+                        `Rating HTTP error! Status: ${ratingResponse.status}`
+                      );
+                    }
+                    return ratingResponse.json(); 
+                  })
+                  .then((ratingData) => {
+                    product.rating = ratingData; 
+                  })
+              );
+            }
+  
+            if (product.category_id) {
+              promises.push(
+                fetch(
+                  `http://localhost:8080/product/category/${product.category_id}`,
+                  {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      sessionId: sessionKey,
+                      userId: userId,
+                    },
+                  }
+                )
+                  .then((categoryResponse) => {
+                    if (!categoryResponse.ok) {
+                      throw new Error(
+                        `Category HTTP error! Status: ${categoryResponse.status}`
+                      );
+                    }
+                    return categoryResponse.json(); 
+                  })
+                  .then((categoryData) => {
+                    product.category = categoryData; 
+                  })
+              );
+            }
+  
+            return Promise.all(promises).then(() => product);
+          })
+        );
+      })
+      .then((finalProducts) => {
+        console.log('Final Products with Ratings and Categories:', finalProducts);
+        setProduct(finalProducts);
+      })
+      .catch((error) => {
+        console.error('Error fetching products or ratings/categories:', error);
+      });
+  }, []);
+   
+
+  const getTopProducts = () => {
+    const products = product.filter((item) => item?.rating?.score > 4.8).reverse();
+    setTopProducts(products);
+  };
+  
+  useEffect(() => {
+    if(product.length > 0){
+    getTopProducts();
+    }
+  }, [product]); 
+  
+  useEffect(() => {
+    console.log(topProducts); 
+  }, [topProducts]);
 
 
   useEffect(function () {
@@ -73,7 +154,7 @@ export default function Home() {
     let userId = localStorage.getItem('userId');
     fetch('http://localhost:8080/product/category', {
       method: 'GET',
-      credentials: 'include', // Include session cookies
+      credentials: 'include', 
       headers: {
         'Content-Type': 'application/json',
         sessionId: sessionKey,
@@ -89,28 +170,6 @@ export default function Home() {
       });
   }, []);
   return (
-    // <div className="parent">
-    //   <div className="side1">
-    //     {category.map((item) => {
-    //       return (
-    //         <Link to={`/product/category's/${item.id}`} className='custom-link'>
-    //           <div className="side11">{item.title}</div>
-    //         </Link>
-    //       );
-    //     })}
-    //   </div>
-    //   <div className="side2">
-    //     {product.map((item) => {
-    //       return (
-    //         <div className="productitem">
-    //           <Link to={`/product/${item.id}`} className='custom-link'>
-    //             <ProductCard product={item} />
-    //           </Link>
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
-    // </div>
     <div className='whole-box'>
      <div className='box1'>
         <Swiper modules={[Navigation,Autoplay]} navigation autoplay={{delay:3000,disableOnInteraction:false}} loop className='box11'>
@@ -162,10 +221,30 @@ export default function Home() {
           &#8249;
           </button>
       <div className='box321' ref={scrollRef2}>
-        <div className='fet-box'></div>
-        <div className='fet-box'></div>
-        <div className='fet-box'></div>
-        <div className='fet-box'></div>
+        {topProducts.map((item) => {
+            return(
+              <div className='top-products-cont'>
+                <div className='top-img-cont'>
+                  <img src={item?.image} className='top-img'/>
+                </div>
+                <div className='top-pro-det'>
+                   <div style={{textAlign:'left',fontSize:'130%',overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{item?.title}</div>
+                   <div style={{display:'flex'}}>
+                    <div style={{color:'rgb(250,204,21)'}}><StarIcon /></div>
+                    <div style={{color:'rgb(250,204,21)'}}><StarIcon /></div>                 
+                    <div style={{color:'rgb(250,204,21)'}}><StarIcon /></div>  
+                    <div style={{color:'rgb(250,204,21)'}}><StarIcon /></div>
+                    <div style={{color:'rgb(250,204,21)'}}><StarIcon /></div>
+                    <div style={{lineHeight:'150%',marginLeft:'3%'}}>{' '}({item?.rating?.score})</div>
+                   </div>
+                   <div style={{display:'flex'}}>
+                    <div style={{fontSize:'140%'}}>₹{item?.sellingPrice}</div>
+                    <button style={{width:'30%',marginLeft:'50%',height:'120%',backgroundColor:'rgb(34, 94, 247)',fontWeight:'500',color:'white',fontSize:'110%',cursor:'pointer',borderRadius:'0.4rem',border:'none'}}>Add to Cart</button>
+                   </div>
+                </div>
+              </div>
+            )
+          })}
       </div>
       <button onClick={() => scrollRight(scrollRef2)} className='scroll-btnn right'>
       &#8250;

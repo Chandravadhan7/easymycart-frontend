@@ -7,7 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { userAddress } from './fetchUserAddress';
 import { Link } from 'react-router-dom';
-
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 export default function Profile(){
   let dispatch = useDispatch();
   let [toDisplay,setToDisplay] = useState('');
@@ -21,6 +21,7 @@ export default function Profile(){
       dispatch(userAddress());
   },[])
 
+  
   let address = useSelector((state) => state.address);
     let userName = localStorage.getItem('userName')
     return(
@@ -28,7 +29,7 @@ export default function Profile(){
             <div className='page-side1'>
                <div className='user-name'>
                    <div style={{width:'25%'}}>
-
+                     <img src={'https://i.ibb.co/67HWYXmq/icons8-user-96.png'} style={{width:'100%',height:'100%',objectFit:'contain'}}/>                   
                    </div>
                    <div style={{width:'75%',display:'flex',flexDirection:'column',justifyContent:'center',gap:'5%'}}>
                       <div style={{height:'20%',textAlign:'left',fontSize:'70%'}}>
@@ -40,22 +41,28 @@ export default function Profile(){
                    </div>
                </div>
                <div className='user-contents'>
-               <div className='user-contents-cw'>
+               <Link to={'/cart'}className='user-contents-cw'>
                     <div style={{width:'20%',color:'rgb(10, 101, 239)',paddingTop:'5%'}}>
                       <LocalMallSharpIcon />
                     </div>
-                    <div style={{width:'80%',textAlign:'left',fontSize:'110%',lineHeight:'350%',color:'gray'}}>
+                    <div style={{width:'70%',textAlign:'left',fontSize:'110%',lineHeight:'350%',color:'gray'}}>
                           MY ORDERS
                         </div>
+                        <div style={{width:'10%',lineHeight:'430%',color:'gray'}}>
+                      <ArrowForwardIosIcon fontSize='small'/>
                     </div>
-                    <div className='user-contents-cw'>
+                    </Link>
+                    <Link to={'/wishlist'} className='user-contents-cw'>
                     <div style={{width:'20%',color:'rgb(10, 101, 239)',paddingTop:'5.3%'}}>
                        <FavoriteIcon/>
                     </div>
-                    <div style={{width:'80%',textAlign:'left',fontSize:'110%',lineHeight:'350%',color:'gray'}}>
+                    <div style={{width:'70%',textAlign:'left',fontSize:'110%',lineHeight:'350%',color:'gray'}}>
                           MY WISHLIST
                     </div>
+                    <div style={{width:'10%',lineHeight:'430%',color:'gray'}}>
+                      <ArrowForwardIosIcon fontSize='small'/>
                     </div>
+                    </Link>
                     <div className='user-contents-account'>
                         <div style={{height:"40%",display:'flex'}}>
                         <div style={{width:'20%',color:'rgb(10, 101, 239)',paddingTop:'6%'}}>

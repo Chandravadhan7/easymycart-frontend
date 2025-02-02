@@ -9,13 +9,15 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .modal-container{
    background-color: white;
-   width: 30%;
-   height: 70%;
+   width: 27%;
+   height: 50%;
    text-align: center;
    position: relative;
+   border-radius: 0.5rem;
 }
 .close-btn{
     position: absolute;
@@ -23,10 +25,18 @@
     right: 1rem;
     cursor: pointer;
     border: none;
+    width: 10%;
+    height: 10%;
+    background-color: #fff;
+    font-size: 150%;
+    color: gray;
+}
+.close-btn:hover{
+    border: 3px solid rgb(10, 101, 239);
 }
 .modal-contents{
     display: flex;
     flex-direction: column;
     height: 100%;
-    width: 90%;
+    width: 100%;
 }

@@ -6,11 +6,16 @@ import {Navigation,Autoplay} from "swiper/modules"
 import "swiper/css"
 import "swiper/css/navigation"
 import StarIcon from '@mui/icons-material/Star';
+import { addToCart } from '../store/slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCartItems } from './fetchCartItems';
 
 export default function Home() {
   let [product, setProduct] = useState([]);
   let [topProducts,setTopProducts] = useState([]);
   let [category, setCategory] = useState([]);
+  let [cartDetails, setCartDetails] = useState(null);
+  let dispatch = useDispatch()
   let navigate = useNavigate();
   let scrollRef1 = useRef(null);
   let scrollRef2 = useRef(null);
@@ -22,6 +27,46 @@ export default function Home() {
   const scrollRight = (ref) =>{
     ref.current.scrollBy({left:300,behavior:'smooth'});
   }
+
+  let cart = useSelector((state) => state.cart);
+  console.log(cart)
+  useEffect(() => {
+    if (cartDetails?.id) {
+      dispatch(fetchCartItems(cartDetails?.id));
+    }
+  }, [cartDetails?.id, dispatch]);
+  useEffect(() => {
+    async function fetchCart() {
+      try {
+        let sessionKey = localStorage.getItem('sessionId');
+        let userId = localStorage.getItem('userId');
+        const response = await fetch('http://localhost:8080/cart/', {
+          method: 'GET',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(
+            `HTTP error! Status: ${response.status}. Message: ${errorText}`,
+          );
+        }
+
+        const resp = await response.json();
+        console.log('Cart retrieved successfully:', resp);
+        setCartDetails(resp);
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+      }
+    }
+
+    fetchCart();
+  }, [dispatch]);
 
   const fetchwithauth = async () =>{
       let sessionKey = localStorage.getItem('sessionId');
@@ -169,6 +214,44 @@ export default function Home() {
         setCategory(response);
       });
   }, []);
+
+    async function handleAddToCart(product) {
+    try {
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
+      if (!product || !product.id) {
+        throw new Error('Product details are missing or invalid.');
+      }
+
+      console.log('Product ID:', product.id);
+
+      dispatch(addToCart(product));
+
+      const cartId = cartDetails.id;
+
+      const response = await fetch(
+        `http://localhost:8080/cart/${cartId}/cartitems?product_id=${product.id}&quantity=1`,
+        {
+          method: 'POST',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to add to cart. Status: ${response.status}`);
+      }
+
+      console.log('Product successfully added to cart.');
+    } catch (error) {
+      console.error('Error adding to cart:', error.message);
+    }
+  }
+
   return (
     <div className='whole-box'>
      <div className='box1'>
@@ -239,7 +322,7 @@ export default function Home() {
                    </div>
                    <div style={{display:'flex'}}>
                     <div style={{fontSize:'140%'}}>₹{item?.sellingPrice}</div>
-                    <button style={{width:'30%',marginLeft:'50%',height:'120%',backgroundColor:'rgb(34, 94, 247)',fontWeight:'500',color:'white',fontSize:'110%',cursor:'pointer',borderRadius:'0.4rem',border:'none'}}>Add to Cart</button>
+                    <button style={{width:'30%',marginLeft:'50%',height:'120%',backgroundColor:'rgb(34, 94, 247)',fontWeight:'500',color:'white',fontSize:'110%',cursor:'pointer',borderRadius:'0.4rem',border:'none'}} onClick={() =>{cart.some((cartitem) => cartitem.id === item.id)?navigate('/cart'):handleAddToCart(item)}}>{cart.some((cartItem) => cartItem.id === item.id) ? 'Go To Cart' : 'Add To Cart'}</button>
                    </div>
                 </div>
               </div>

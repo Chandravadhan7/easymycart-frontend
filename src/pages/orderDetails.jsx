@@ -82,7 +82,7 @@ export default function OrderDetails(){
                     <div className="del-address11"></div>
                     <div className="del-address11">Delivery Address</div>
                     <div className="del-address11">{address?.fullName}</div>
-                    <div className="del-address12">{address?.flatNumber} {address?.area}, {address?.village},{address?.district}, {address?.landMark} , {address?.village} - {address?.pinCode} ,  {address?.state}</div>
+                    <div className="del-address12">{address?.flatNumber} {address?.area}, {address?.village},{address?.district}, {address?.landMark} , {address?.village} - {address?.pinCode} ,  {address?.state}.</div>
                     <div className="del-address13"><span style={{fontWeight:'550'}}>Phone number</span> {address?.phone}</div>
                 </div>
             </div>

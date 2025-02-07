@@ -54,15 +54,14 @@
     background-color: white;
 }
 .name{
-  overflow: hidden;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     width: 160px;
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: gray;
-    display: flex;
-    align-items: start;
     font-size: smaller;
+    text-align: left;
 }
 .cat{
   display: flex;

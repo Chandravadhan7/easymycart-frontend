@@ -47,11 +47,6 @@ export default function Wishlist() {
 
   if (wishlist && wishlist.length > 0) {
     return (
-      // <div className="wish">
-      //   {wishlist.map((item) => {
-      //     return <WishListCard wishListItem={item} />;
-      //   })}
-      // </div>
       <div className="wishlist-container">
       <h1 className="wishlist-title">My Wishlist<span style={{marginLeft:'1.5%',fontSize:'90%',fontWeight:'50',color:'#999999'}}>{wishlist.length+" Items"}</span></h1>
       {wishlist && wishlist.length > 0 ? (

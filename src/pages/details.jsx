@@ -124,8 +124,8 @@ export default function Details() {
   useEffect(() => {
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
-    
-    // Fetch product details
+  
+    // Fetch product details first
     fetch(`http://localhost:8080/product/${param.id}`, {
       method: 'GET',
       credentials: 'include',
@@ -142,9 +142,11 @@ export default function Details() {
         return response.json();
       })
       .then((productResponse) => {
+        let promises = [];
+  
+        // If product has a rating_id, fetch rating details
         if (productResponse.rating_id) {
-        
-           return fetch(
+          let ratingPromise = fetch(
             `http://localhost:8080/product/rating/${productResponse.rating_id}`,
             {
               method: 'GET',
@@ -154,22 +156,22 @@ export default function Details() {
                 sessionId: sessionKey,
                 userId: userId,
               },
-            },
+            }
           )
-            .then((ratingResponse) => {
-              if (!ratingResponse.ok) {
-                throw new Error(`HTTP error! Status: ${ratingResponse.status}`);
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`Rating fetch failed. Status: ${res.status}`);
               }
-              return ratingResponse.json();
+              return res.json();
             })
-            .then((ratingData) => ({
-              ...productResponse,
-              rating: ratingData,
-            }));
-          
+            .then((ratingData) => ({ rating: ratingData }));
+  
+          promises.push(ratingPromise);
         }
-        if(productResponse.category_id){
-          return fetch(
+  
+        // If product has a category_id, fetch category details
+        if (productResponse.category_id) {
+          let categoryPromise = fetch(
             `http://localhost:8080/product/category/${productResponse.category_id}`,
             {
               method: 'GET',
@@ -180,21 +182,36 @@ export default function Details() {
                 userId: userId,
               },
             }
-          ).then((categoryResp) =>{return categoryResp.json();})
-          .then((categoryResp) => {
-            return {...productResponse,category:categoryResp};
-          })
+          )
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`Category fetch failed. Status: ${res.status}`);
+              }
+              return res.json();
+            })
+            .then((categoryData) => ({ category: categoryData }));
+  
+          promises.push(categoryPromise);
         }
-        return productResponse; // No rating_id, return product as is
+  
+        // Resolve all promises and merge the results with product data
+        return Promise.all(promises).then((results) => {
+          let finalData = { ...productResponse };
+          results.forEach((data) => {
+            finalData = { ...finalData, ...data };
+          });
+          return finalData;
+        });
       })
       .then((finalResponse) => {
         setProductDetails(finalResponse);
-        console.log(finalResponse)
+        console.log(finalResponse);
       })
       .catch((error) => {
-        console.error('Error fetching product or rating:', error);
+        console.error('Error fetching product data:', error);
       });
   }, [param.id]);
+  
   const getReviws = async () =>{
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
@@ -298,56 +315,97 @@ export default function Details() {
     } catch (error) {}
   }
 
-  useEffect(
-    function () {
-      let sessionKey = localStorage.getItem('sessionId');
-      let userId = localStorage.getItem('userId');
-      if (productDetails && productDetails.category_id) {
-        fetch(
-          `http://localhost:8080/product/category's/${productDetails?.category_id}`,
-          {
-            method: 'GET',
-            credentials: 'include', // Include session cookies
-            headers: {
-              'Content-Type': 'application/json',
-              sessionId: sessionKey,
-              userId: userId,
-            },
-          },
-        )
-          .then((response) => {
-            return response.json();
+  useEffect(() => {
+    let sessionKey = localStorage.getItem('sessionId');
+    let userId = localStorage.getItem('userId');
+  
+    fetch(`http://localhost:8080/product/category's/${productDetails?.category_id}`, {
+      method: 'GET',
+      credentials: 'include', // Include session cookies
+      headers: {
+        'Content-Type': 'application/json',
+        sessionId: sessionKey,
+        userId: userId,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json(); // Parse the array of products
+      })
+      .then((productArray) => {
+        return Promise.all(
+          productArray.map((product) => {
+            const promises = [];
+  
+            if (product.rating_id) {
+              promises.push(
+                fetch(`http://localhost:8080/product/rating/${product.rating_id}`, {
+                  method: 'GET',
+                  credentials: 'include',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    sessionId: sessionKey,
+                    userId: userId,
+                  },
+                })
+                  .then((ratingResponse) => {
+                    if (!ratingResponse.ok) {
+                      throw new Error(
+                        `Rating HTTP error! Status: ${ratingResponse.status}`
+                      );
+                    }
+                    return ratingResponse.json(); // Parse the rating
+                  })
+                  .then((ratingData) => {
+                    product.rating = ratingData; // Add the rating to the product
+                  })
+              );
+            }
+  
+            if (product.category_id) {
+              promises.push(
+                fetch(
+                  `http://localhost:8080/product/category/${product.category_id}`,
+                  {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      sessionId: sessionKey,
+                      userId: userId,
+                    },
+                  }
+                )
+                  .then((categoryResponse) => {
+                    if (!categoryResponse.ok) {
+                      throw new Error(
+                        `Category HTTP error! Status: ${categoryResponse.status}`
+                      );
+                    }
+                    return categoryResponse.json(); // Parse the category
+                  })
+                  .then((categoryData) => {
+                    product.category = categoryData; // Add the category to the product
+                  })
+              );
+            }
+  
+            // Wait for all promises (rating/category) to resolve and return the updated product
+            return Promise.all(promises).then(() => product);
           })
-          .then((productResponse) => {
-            return Promise.all(
-             productResponse.map((product) => {
-              if(product.rating_id){
-              return fetch(`http://localhost:8080/product/rating/${product.rating_id}`,{
-                method: 'GET',
-                credentials: 'include', // Include session cookies
-                headers: {
-                 'Content-Type': 'application/json',
-                  sessionId: sessionKey,
-                  userId: userId,
-                },
-              }).then((ratingResponse)=>{
-                return ratingResponse.json();
-              }).then((ratingResponse) => {
-                return {...product,rating:ratingResponse};
-              })
-             }
-             return product;
-          })
-            )
-          }).then((finalResponse) => {
-            console.log("categoryproducts")
-            console.log(finalResponse)
-            setCategoryProducts(finalResponse)
-          })
-      }
-    },
-    [productDetails],
-  );
+        );
+      })
+      .then((finalProducts) => {
+        console.log('Final Products with Ratings and Categories:', finalProducts);
+        setCategoryProducts(finalProducts); // Set the final array to state
+      })
+      .catch((error) => {
+        console.error('Error fetching products or ratings/categories:', error);
+      });
+  }, [productDetails]);
+   
 
   function handleRemoveFromWishlist() {}
 
@@ -474,7 +532,7 @@ export default function Details() {
         {recentProducts.map((item) =>{
           return(
             <div className="procont" key={item.id}>
-            <Link to={`/product/${item.id}`}>
+            <Link to={`/product/${item.id}`} className='custom-link'>
               <ProductCard product={item} />
             </Link>
           </div>

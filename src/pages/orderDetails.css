@@ -51,9 +51,8 @@
 .del-address12{
    height: 30%;
    width: 90%; 
-   /* border: 1px solid red; */
    text-align: left;
-   line-height: 140%;
+   line-height: 120%;
    font-size: 90%;
    text-transform: capitalize;
    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -61,7 +60,7 @@
 .del-address13{
    height: 10%;
    width: 90%; 
-   /* border: 1px solid red; */
+   margin-top: 2%;
    text-align: left;
    font-family:sans-serif;
 }

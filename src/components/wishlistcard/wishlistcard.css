@@ -1,35 +1,15 @@
-/* .wishcard {
-  display: flex;
-  flex-direction: column;
-  height: 360px;
-  width: 250px;
-  border: 2px solid rgb(221, 220, 220);
-  padding: 1rem 1rem;
-  gap: 1rem;
-}
-.containimage {
-  height: 70%;
-  width: 100%;
-  overflow: hidden;
-}
-.imge {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-} */
+
 
 .wishcard {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 260px;
-  /* background-color: #fff; */
-  /* border: 0.5px solid #ddd; */
+  width: 20%;
+  margin-bottom: 4%;
   background-color: #fff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
   overflow: hidden;
   position: relative;
-  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
   transition: transform 0.3s ease;
   height: 25rem;
 }
@@ -43,7 +23,6 @@
   height: 70%; 
   width: 100%;
   overflow: hidden;
-  /* border: 0.1px solid rgb(230, 228, 228); */
   background-color:#fff;
   border-bottom: 1px solid rgba(234, 234, 234, 0.893);
 }
@@ -63,13 +42,14 @@
   border: none;
   font-size: 80%;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 40%;
   transition: background-color 0.3s ease;
   line-height: 130%;
 }
 
 .remove-btn:hover {
   background-color: rgb(249, 133, 133);
+  color: #fff;
 }
 
 /* Out of Stock Overlay */
@@ -97,6 +77,9 @@
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-bottom: 10px;
   color: #999999;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .price-section {
@@ -140,6 +123,8 @@
 
 .move-to-bag-btn:hover {
   background-color: #e5375c;
+  color: #fff;
+
 }
 
 /* Out-of-Stock Style */

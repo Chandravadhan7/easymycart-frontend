@@ -42,8 +42,10 @@ export default function CartCard({ cartitem }) {
 
   return (
     <div className="cart-item" >
-      <div className='image-boxx'>     
-        <img src={cartitem.image} alt={cartitem.name} />
+      <div className='image-boxx'>
+        <div className='image-boox'>    
+        <img src={cartitem.image} alt={cartitem.name} className='boox-imge'/>
+        </div> 
         <Quantity cartItem={cartitem}/>
       </div>
     <div className="cart-item-detail">

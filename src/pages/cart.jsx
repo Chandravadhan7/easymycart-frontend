@@ -1,94 +1,3 @@
-// import { useDispatch, useSelector } from 'react-redux';
-// import CartCard from '../components/cartcard/cartcard';
-// import { Link } from 'react-router-dom';
-// import { useEffect, useState ,useMemo} from 'react';
-// import { fetchCartItems } from './fetchCartItems';
-// import "./cart.css"
-
-// export default function Cart() {
-//   let dispatch = useDispatch();
-//   let [cartId, setCartId] = useState(null);
-//   let cart = useSelector((state) => {
-//     return state.cart;
-//   });
-  
-  
-//   const totalCart = useMemo(() => {
-//     return cart.reduce((acc, item) => acc + item.price , 0);
-//   }, [cart]);
-
-//   // console.log('cart', JSON.stringify(cart, null, 2));
-//   async function placeOrder() {
-//     let sessionKey = localStorage.getItem('sessionId');
-//     let userId = localStorage.getItem('userId');
-//     const response = await fetch(`http://localhost:8080/cart/${cartId}/status`,{
-//       method:'PATCH',
-//       credentials:'include',
-//       headers:{
-//         'Content-Type':'application/json',
-//         sessionId:sessionKey,
-//         userId:userId,
-//       },
-//     });
-//     if(!response.ok){
-//       console.log("error occured");
-//     }else{
-//       console.log("status updated successfully");
-//     }
-//   }
-//   useEffect(() => {
-//     let sessionKey = localStorage.getItem('sessionId');
-//     let userId = localStorage.getItem('userId');
-//     fetch('http://localhost:8080/cart/', {
-//       method: 'GET',
-//       credentials: 'include', // Include session cookies
-//       headers: {
-//         'Content-Type': 'application/json',
-//         sessionId: sessionKey,
-//         userId: userId,
-//       },
-//     })
-//       .then((response) => response.json())
-//       .then((data) => {
-//         setCartId(data.id);
-//         console.log('Cart entity response:', JSON.stringify(data, null, 2));
-//       })
-//       .catch((error) => console.error('Error fetching cart entity:', error));
-//   }, []);
-
-//   useEffect(() => {
-//     if (cartId) {
-//       dispatch(fetchCartItems(cartId));
-//     }
-//   }, [cartId, dispatch]);
-
-//   if (cart && cart.length > 0) {
-//     return (
-//       <div className="cart-page">
-//         <div className="cart-page1">
-//           {cart.map((item) => {
-//             return <CartCard cartitem={item} />;
-//           })}
-//         </div>
-//         <div className="cart-page2">
-//             <h3>Cart summary</h3>
-//             <h4>Total items:{cart.reduce((acc, item) => acc + item.quantity, 0)}</h4>
-//             <h4>Total amount: {totalCart}</h4>
-//             <Link to='/checkoutpage'><button className="btn1">Place an Order</button></Link>
-//          </div>
-//       </div>
-//     );
-//   } else {
-//     return (
-//       <div>
-//         <h1>Your Cart is Empty</h1>
-//         <Link to={'/home'}>
-//           <button className="btn1">Shop now</button>
-//         </Link>
-//       </div>
-//     );
-//   }
-// }
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -125,7 +34,6 @@ export default function Cart() {
     }
   }, []);
   
-  // let selectAddressId = localStorage.getItem("selectAddress");
 
   const getAddress = async () => {
     let sessionKey = localStorage.getItem('sessionId');

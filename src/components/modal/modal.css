@@ -40,3 +40,13 @@
     height: 100%;
     width: 100%;
 }
+@media screen and (max-width:786px){
+    .modal-container{
+        background-color: white;
+        width: 90%;
+        height: 50%;
+        text-align: center;
+        position: relative;
+        border-radius: 0.5rem;
+     }
+}

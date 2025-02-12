@@ -42,5 +42,22 @@
     justify-content: start;
     align-items: start;
    }
-  
+   .wishlist-title {
+    font-size: 120%;
+    padding: 1% 0 1% 1%;
+    font-weight: bold;
+    margin-bottom: 2%;
+    margin-top: 2%;
+    text-align: left;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+    width: 95%;
+  }
+  .wishlist-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2%;
+    justify-content: start;
+    width: 98%;
+  }
 }

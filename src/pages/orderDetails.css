@@ -3,7 +3,6 @@
   margin-left:10%;
   margin-right: 10%;
   margin-top: 2%;
-  /* border: 1px solid black; */
   display: flex;
   gap:4%;
   padding-left: 2%;
@@ -11,10 +10,8 @@
 }
 .pro-orders{
   width: 66%;
-  /* border: 1px solid blue; */
   display: flex;
   flex-direction: column;
-  /* gap:3%; */
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
 }
 .item-title{
@@ -27,8 +24,9 @@
 }
 .del-address{
     width: 30%;
-    /* border: 1px solid blue; */
 }
+
+
 .del-address1{
     height: 15rem;
     width: 100%;
@@ -63,4 +61,28 @@
    margin-top: 2%;
    text-align: left;
    font-family:sans-serif;
+}
+
+@media screen and (max-width:500px){
+  .total-cont{
+    margin: 1% 1% 0 1%;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap:3rem;
+  }
+  .del-address{
+    order:1;
+    width: 70%;
+    height: 16rem;
+  }
+  .pro-orders{
+    order:2;
+    width: 98%;
+  }
+  .del-address1{
+    height: 100%;
+    width: 100%;
+  }
 }

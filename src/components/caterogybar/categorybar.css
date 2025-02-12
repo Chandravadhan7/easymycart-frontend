@@ -11,3 +11,16 @@
 .cat-bar-entities{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+@media screen and (max-width:500px){
+    .cat-bar{
+        display: flex;
+        gap:2.5%;
+        width: 100%;
+        justify-content: center;
+        height: 3rem;
+        align-items: center;
+        background-color: #fff;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+        font-size: 10px;
+    }
+}

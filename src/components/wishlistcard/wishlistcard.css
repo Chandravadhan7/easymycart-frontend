@@ -12,6 +12,7 @@
   position: relative;
   transition: transform 0.3s ease;
   height: 25rem;
+  min-width: 220px;
 }
 
 .wishcard:hover {
@@ -130,4 +131,55 @@
 /* Out-of-Stock Style */
 .out-of-stock {
   opacity: 0.6;
+}
+@media screen and (max-width:500px){
+  .wishcard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 48%;
+    margin-bottom: 4%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease;
+    height: 18rem;
+    min-width: 120px;
+  }
+  .move-to-bag-btn {
+    background-color:#fff ;
+    color: #ff3f6c;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  .price-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .prce {
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .original-price {
+    font-size: 9px;
+    text-decoration: line-through;
+    color: #777;
+  }
+  
+  .discount {
+    font-size: 9px;
+    color: green;
+    font-weight: bold;
+  }
 }

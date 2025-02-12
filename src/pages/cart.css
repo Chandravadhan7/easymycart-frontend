@@ -50,7 +50,6 @@ body {
   }
   .add-det{
     width:50%;
-    /* border: 1px solid black; */
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -240,9 +239,9 @@ body {
       flex-direction: column;
       width:100%;
       justify-content: center;
+      align-items: center;
       height: auto;
-      border: 1px solid black;
-      padding: 12px;
+      padding: 0;
     }
     .cart-items {
       display: flex;
@@ -250,13 +249,13 @@ body {
       margin: 5px;
       border-radius: 8px;
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
-      width: 90%;
+      width: 93%;
       /* height: 100%; */
       gap: 2rem;
     }
     .cart-summary {
       background-color: #fff;
-      padding: 20px;
+      padding: 10px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       position: sticky;
@@ -267,6 +266,48 @@ body {
       flex-direction: column; 
       justify-content: space-between; /* Spread out content evenly */
       box-sizing: border-box; /* Ensures padding doesn't overflow */
+    }
+    .address-details{
+      width: 80%;
+      /* border: 2px solid blue; */
+      height: 100%;
+    }
+    .add-det{
+      width:90%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+      gap:1%;
+    }
+    .add-det1{
+      width: 98%;
+      /* border: 1px solid black; */
+      height: 30%;
+      text-align: left;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      font-size: 14px;
+    }
+    .add-det2{
+      width: 98%;
+      height: 30%;
+      text-align: left;
+      font-size: 65%;
+      line-height: 180%;
+      color: rgb(156, 155, 155);
+      text-transform: capitalize;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .address-btn{
+      width: 20%;
+      /* border: 2px solid rgb(255, 0, 106); */
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     
   }

@@ -106,3 +106,18 @@
     margin-left: 7%;
     color: gray;
 }
+@media screen and (max-width:500px){
+    .order{
+        margin: 1% 1% 0 1%;
+        width:98%;
+    }
+    .order-child-img{
+        width:35%;
+    }
+    .order-child-title{
+        width:65%;
+    }
+    .order-child-date{
+        display: none;
+    }
+}

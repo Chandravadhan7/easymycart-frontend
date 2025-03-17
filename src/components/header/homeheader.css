@@ -133,3 +133,29 @@
  line-height: 250%;
 
 }
+@media screen and (max-width:500px){
+  .head-2{
+    flex-direction: column;
+    gap:0.02rem;
+  }
+  .entities{
+    line-height: 70%;
+    height: 1rem;
+    font-size: 90%;
+    text-transform: lowercase;
+  }
+  .search-bar{
+    margin-right: 0;
+  }
+  .barr{
+    font-size: 90%;
+  }
+  .head-1{
+    font-size: 1rem;
+    width:20%;
+    margin-left: 0.5rem;
+  }
+  .header{
+    gap:0.5rem;
+  }
+}

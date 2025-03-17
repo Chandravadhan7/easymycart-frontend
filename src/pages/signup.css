@@ -90,3 +90,15 @@
 .crd-footer a:hover {
   color: #0056b3;
 }
+@media screen and (max-width:500px){
+   .cont{
+    width: 98%;
+   }
+   .cont1{
+    width:100%;
+   }
+   .bttns{
+    height: 10%;
+   }
+   
+}

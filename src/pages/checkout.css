@@ -73,3 +73,19 @@
     width: 100%;
     margin-top: 20px;
 }
+@media screen and (max-width:500px){
+    .check-out-parent{
+        flex-direction: column;
+        margin-left: 2%;
+        margin-right: 2%;
+        gap:1rem;
+    }
+    .check-out-cont{
+        width:100%;
+        gap:1rem;
+    }
+    .checkout-sum{
+        width:100%;
+    }
+    
+}

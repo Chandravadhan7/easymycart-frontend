@@ -18,7 +18,6 @@
 .address-items-cont{
     width: 100%;
     height: 80%;
-    /* border: 1px solid black; */
     display: flex;
     flex-wrap: wrap;
     /* justify-content: center; */
@@ -55,4 +54,26 @@
     justify-content: end;
     align-items: end;
     color: rgb(2, 91, 143);
+}
+@media screen and (max-width:500px){
+    .cont-add{
+        margin: 4% 2% 0 1%;
+        width:97%;
+        height: auto;
+        gap:1rem;
+    }
+    .address-head{
+        height: 5%;
+        line-height: 100%;
+    }
+    .address-items-cont{
+        flex-direction: column;
+        flex-wrap: wrap;
+        height: 91%;
+        gap:0.5rem;
+    }
+    .address-item{
+        width:100%;
+        min-height: 200px;
+    }
 }

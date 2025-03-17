@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     gap:1%;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .page-side1{
    width: 20%;
@@ -92,4 +92,17 @@
 .pro-info:hover{
     background-color: rgb(245, 253, 253);
     color: rgb(10, 101, 239);
+}
+@media screen and (max-width:500px){
+    .profile-page{
+        flex-direction: column;
+        margin: 1% 1% 0 1%;
+        height: 130vh;
+    }
+    .page-side1{
+        width:98%;
+    }
+    .page-side2{
+        width:98%;
+    }
 }

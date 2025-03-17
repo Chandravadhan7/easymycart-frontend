@@ -70,7 +70,7 @@ export default function Header() {
       {sessionId ? (
         // If logged in, show username with a dropdown
         <div className="head2-user">
-          <div><PersonIcon /></div>
+          <PersonIcon />
           <div className="entity" >{"Hello,"+username}</div>
           <KeyboardArrowDownOutlinedIcon />
           
@@ -111,7 +111,7 @@ export default function Header() {
         </Link>
       )}
        <Link to='/cart' className='head2'>
-      <div><ShoppingCartIcon /></div>
+        <ShoppingCartIcon />
         <div className='entity'>cart</div>
       </Link>
       <Link to='/wishlist' className='head2'>

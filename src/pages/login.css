@@ -116,3 +116,8 @@
   text-decoration: none;
   color: rgb(4, 214, 4);
 }
+@media screen and (max-width:500px){
+  .login-cont{
+    width: 98%;
+  }
+}

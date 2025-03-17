@@ -134,3 +134,29 @@
 .dropdown-item:hover {
   background-color: #f1f1f1;
 }
+@media screen and (max-width:500px){
+  .head2{
+    flex-direction: column;
+    gap:0.02rem;
+  }
+  .entity{
+    height: 1rem;
+    line-height: 70%;
+    font-size: 90%;
+    text-transform: lowercase;
+  }
+  .searchbar{
+    margin-right: 0;
+  }
+  .bar{
+    font-size: 90%;
+  }
+  .head1{
+    font-size: 1rem;
+    width:20%;
+    margin-left: 0.5rem;
+  }
+  .head{
+    gap:0.5rem;
+  }
+}

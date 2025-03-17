@@ -21,6 +21,10 @@
         align-items: center;
         background-color: #fff;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .08);
-        font-size: 10px;
+        font-size: 11px;
+    }
+    .cat-bar-entities{
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-transform: capitalize;
     }
 }

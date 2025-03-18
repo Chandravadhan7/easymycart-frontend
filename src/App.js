@@ -23,7 +23,6 @@ import Profile from './pages/profile';
 function App() {
   let location = useLocation();
 
-  // Pages that should display the Header
   const headerPaths = [
     '/cart',
     '/wishlist',
@@ -43,7 +42,6 @@ function App() {
     location.pathname.startsWith(path.replace(/:\w+/g, '')) // Handle dynamic params
   );
 
-  // Pages that should display the CategoryBar
   const categoryBarPaths = [
     '/cart',
     '/wishlist',
@@ -58,7 +56,6 @@ function App() {
     location.pathname.startsWith(path.replace(/:\w+/g, ''))
   );
 
-  // Show HomeHeader only on the home page
   const shouldShowHomeHeader = location.pathname === '/';
 
   return (

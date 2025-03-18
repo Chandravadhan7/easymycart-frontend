@@ -124,16 +124,6 @@ export default function Category() {
 
   return (
     <div className="parent">
-      {/* <div className="side1">
-        CATEGORIES
-        {category.map((item) => {
-          return (
-            <div className="side11">
-              <Link to={`/product/category's/${item.id}`} className='custom-link'><div>{item.title}</div></Link>
-            </div>
-          );
-        })}
-      </div> */}
       <div className="side2">
         {products.map((item) => {
           return (

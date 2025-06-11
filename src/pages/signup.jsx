@@ -70,70 +70,84 @@ export default function SignUp() {
   return (
     <div className="main">
       <div className="cont">
-        <div className='cont1'>
-        <h2>Create an Account</h2>
-        <form onSubmit={handleSubmit} className='form'>
-          <div className="frm-grp">
-            <div style={{display:'flex',gap:'3%'}}>
-              <div><Person4Icon fontSize='large'/></div>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder=" Username"
-            /></div>
-            {usernameError && (
-              <div className="error-message">{usernameError}</div>
-            )}
-          </div>
-          <div className="frm-grp">
-          <div style={{display:'flex',gap:'3%'}}>
-              <div><EmailIcon fontSize='large'/></div>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder=" Email"
-            />
+        <div className="cont1">
+          <h2>Create an Account</h2>
+          <form onSubmit={handleSubmit} className="form">
+            <div className="frm-grp">
+              <div style={{ display: 'flex', gap: '3%' }}>
+                <div>
+                  <Person4Icon fontSize="large" />
+                </div>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder=" Username"
+                />
+              </div>
+              {usernameError && (
+                <div className="error-message">{usernameError}</div>
+              )}
             </div>
-            {emailError && <div className="error-message">{emailError}</div>}
-          </div>
-          <div className="frm-grp">
-          <div style={{display:'flex',gap:'3%'}}>
-              <div><HttpsIcon fontSize='large'/></div>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder=" Password"
-            /></div>
-            {passwordError && (
-              <div className="error-message">{passwordError}</div>
-            )}
-          </div>
-          <div className="frm-grp">
-          <div style={{display:'flex',gap:'3%'}}>
-              <div><KeyIcon fontSize='large'/></div>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm Password"
-            />
+            <div className="frm-grp">
+              <div style={{ display: 'flex', gap: '3%' }}>
+                <div>
+                  <EmailIcon fontSize="large" />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder=" Email"
+                />
+              </div>
+              {emailError && <div className="error-message">{emailError}</div>}
             </div>
-            {confirmPasswordError && (
-              <div className="error-message">{confirmPasswordError}</div>
-            )}
+            <div className="frm-grp">
+              <div style={{ display: 'flex', gap: '3%' }}>
+                <div>
+                  <HttpsIcon fontSize="large" />
+                </div>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder=" Password"
+                />
+              </div>
+              {passwordError && (
+                <div className="error-message">{passwordError}</div>
+              )}
+            </div>
+            <div className="frm-grp">
+              <div style={{ display: 'flex', gap: '3%' }}>
+                <div>
+                  <KeyIcon fontSize="large" />
+                </div>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm Password"
+                />
+              </div>
+              {confirmPasswordError && (
+                <div className="error-message">{confirmPasswordError}</div>
+              )}
+            </div>
+            <button className="bttns" type="submit">
+              Sign Up
+            </button>
+          </form>
+          <div className="card-footer">
+            Already have an account? <a href="/login">Log in</a>
           </div>
-          <button className="bttns" type="submit">
-            Sign Up
-          </button>
-        </form>
-        <div className="card-footer">
-          Already have an account? <a href="/login">Log in</a>
         </div>
-        </div>
+        <div className='signup-img-cont'>
+        <img src='https://i.ibb.co/b5SdBsBG/Screenshot-2025-06-11-194813.png'/>
       </div>
+      </div>
+      
     </div>
   );
 }

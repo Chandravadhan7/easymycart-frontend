@@ -30,37 +30,46 @@
 
 .head-2-user {
   width: 12%;
-  position: relative; 
+  position: relative;
   display: flex;
   gap: 0.2rem;
   text-decoration: none;
   color: black;
   align-items: center;
-  cursor: pointer; /* Ensure dropdown is positioned correctly */
+  cursor: pointer;
 }
 
+/* Search Bar */
 .search-bar {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 40%;
   margin-right: 2rem;
-  border: 1px solid #F0F5FF;
-  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
-  background-color: #F0F5FF;
-  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #d1d1d1;
+  background-color: #f5f7ff;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar:focus-within {
+  box-shadow: 0 0 0 2px #1976d2;
+  border-color: #1976d2;
 }
 
 .barr {
   border: none;
   outline: none;
-  font-size: 120%;
-  background-color: #F0F5FF;
-  width:93%;
-  height: 100%;
-  /* border: 1px solid blue; */
+  font-size: 1rem;
+  background-color: transparent;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  font-family: inherit;
+  color: #333;
 }
 
+/* Star Icon */
 .icon-star {
   font-size: 24px;
   cursor: pointer;
@@ -72,90 +81,157 @@
   color: rgb(34, 113, 203);
 }
 
+/* Dropdown Menu */
 .drop-down-menu {
   position: absolute;
   top: 100%;
   right: 0;
   background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
   z-index: 9999;
   display: none;
   flex-direction: column;
-  width: 180px;
-  border-radius: 3px;
+  width: 200px;
+  border-radius: 8px;
   overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
 }
+
 .head-2-user:hover .drop-down-menu {
   display: flex;
 }
+
+/* User Info Block */
+.dropdown-user-info {
+  padding: 10px 12px 6px;
+  border-bottom: 1px solid #eee;
+  font-family: inherit;
+  text-align: left;
+}
+
+.dropdown-user-name {
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.dropdown-user-email {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* Dropdown Items */
 .drop-down-item {
-  cursor: pointer;
-  height: 30px;
   display: flex;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid rgb(224, 222, 222);
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
   transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .drop-down-item:hover {
-  background-color: #f1f1f1;
+  background-color: #f9f9f9;
 }
 
 .drop-down-item1 {
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: black;
+  color: #333;
   width: 100%;
+  gap: 0.75rem;
 }
 
 .drop-down-item-syb {
-  width: 20%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.2rem;
+  color: #1976d2;
 }
 
 .drop-down-item-text {
-  width: 80%;
+  flex: 1;
   text-align: left;
+  font-size: 0.9rem;
 }
+
+/* Badge */
+.dropdown-badge {
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: bold;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 12px;
+  margin-left: auto;
+}
+
+/* Logout */
+.logout .drop-down-item-text {
+  color: #d32f2f;
+}
+
+.logout:hover {
+  background-color: #fff5f5;
+}
+
+/* Text Entities */
 .entities {
   font-size: 100%;
   cursor: pointer;
   text-transform: capitalize;
   color: black;
   overflow: hidden;
- white-space: nowrap;
- text-overflow: ellipsis;
- line-height: 250%;
-
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 250%;
 }
-@media screen and (max-width:500px){
-  .head-2{
-    flex-direction: column;
-    gap:0.02rem;
-  }
-  .entities{
+
+/* Responsive */
+@media screen and (max-width: 500px) {
+  .entities {
     line-height: 70%;
     height: 1rem;
     font-size: 90%;
     text-transform: lowercase;
+    display: none;
   }
-  .search-bar{
+
+  .search-bar {
     margin-right: 0;
+    width: 8%;
+    background-color: #fff;
+    border: 1px solid #fff;
   }
-  .barr{
+
+  .search-bar .barr {
+    display: none;
+  }
+
+  .barr {
     font-size: 90%;
   }
-  .head-1{
+
+  .head-1 {
     font-size: 1rem;
-    width:20%;
-    margin-left: 0.5rem;
+    background-color: #2874f0;
+    width: 22%;
+    margin-left: 1.5rem;
+    margin-right: 5.5rem;
+    margin-top: 0.3rem;
+    margin-bottom: 0.2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: #fff;
+    border-radius: 0.2rem;
   }
-  .header{
-    gap:0.5rem;
+
+  .header {
+    gap: 0.5rem;
   }
 }

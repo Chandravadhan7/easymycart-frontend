@@ -5,7 +5,7 @@ export const fetchWishlist = (wishlistId) => async (dispatch) => {
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
     const response = await fetch(
-      `http://localhost:8080/wishlist/${wishlistId}`,
+      `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/wishlist/${wishlistId}`,
       {
         method: 'GET',
         credentials: 'include', // Include session cookies
@@ -23,15 +23,18 @@ export const fetchWishlist = (wishlistId) => async (dispatch) => {
     const wishlistItems = await response.json();
 
     const productPromises = wishlistItems.map((item) =>
-      fetch(`http://localhost:8080/product/${item.productId}`, {
-        method: 'GET',
-        credentials: 'include', // Include session cookies
-        headers: {
-          'Content-Type': 'application/json',
-          sessionId: sessionKey,
-          userId: userId,
+      fetch(
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/${item.productId}`,
+        {
+          method: 'GET',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
         },
-      }).then((res) => {
+      ).then((res) => {
         if (!res.ok) {
           throw new Error(
             `Failed to fetch product ${item.productId}. Status: ${res.status}`,

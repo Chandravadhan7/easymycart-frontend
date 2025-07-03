@@ -12,15 +12,18 @@ export default function WishListCard({ wishListItem }) {
       try {
         let sessionKey = localStorage.getItem('sessionId');
         let userId = localStorage.getItem('userId');
-        const response = await fetch('http://localhost:8080/cart/', {
-          method: 'GET',
-          credentials: 'include', // Include session cookies
-          headers: {
-            'Content-Type': 'application/json',
-            sessionId: sessionKey,
-            userId: userId,
+        const response = await fetch(
+          'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/',
+          {
+            method: 'GET',
+            credentials: 'include', // Include session cookies
+            headers: {
+              'Content-Type': 'application/json',
+              sessionId: sessionKey,
+              userId: userId,
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           const errorText = await response.text();
@@ -55,7 +58,7 @@ export default function WishListCard({ wishListItem }) {
       const cartId = cartDetails.id;
 
       const response = await fetch(
-        `http://localhost:8080/cart/${cartId}/cartitems?product_id=${product.id}&quantity=1`,
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/${cartId}/cartitems?product_id=${product.id}&quantity=1`,
         {
           method: 'POST',
           credentials: 'include', // Include session cookies
@@ -82,7 +85,7 @@ export default function WishListCard({ wishListItem }) {
     let userId = localStorage.getItem('userId');
     dispatch(removeFromWishlist(wishListItem?.id));
     const response = await fetch(
-      `http://localhost:8080/wishlist/${wishListItem?.id}`,
+      `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/wishlist/${wishListItem?.id}`,
       {
         method: 'DELETE',
         headers: {

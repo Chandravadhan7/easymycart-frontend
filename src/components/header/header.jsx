@@ -20,14 +20,17 @@ export default function Header() {
   const logout = async () => {
     try {
       const sessionKey = localStorage.getItem('sessionId');
-      const response = await fetch('http://localhost:8080/user/api/logout', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          sessionId: sessionKey,
+      const response = await fetch(
+        'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/user/api/logout',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         console.log('session id not found');
@@ -71,7 +74,10 @@ export default function Header() {
         <div className="head-expanded-search">
           <ArrowBackIcon className="back-icon" onClick={handleSearchClose} />
           <div className="searchbar-expanded">
-            <SearchRoundedIcon className="search-icon-expanded" onClick={handleSubmit} />
+            <SearchRoundedIcon
+              className="search-icon-expanded"
+              onClick={handleSubmit}
+            />
             <input
               placeholder="Search for products..."
               value={searchValue}
@@ -84,7 +90,9 @@ export default function Header() {
         </div>
       ) : (
         <div className="head">
-          <div className="head1">EasyMyCart</div>
+          <Link to="/" className="head1">
+            EasyMyCart
+          </Link>
 
           <div className="searchbar">
             <SearchRoundedIcon className="icon" onClick={handleSubmit} />
@@ -119,7 +127,9 @@ export default function Header() {
 
               <div className="dropdown-menu">
                 <div className="dropdown-user-info">
-                  <div className="dropdown-user-name">{username || 'John Doe'}</div>
+                  <div className="dropdown-user-name">
+                    {username || 'John Doe'}
+                  </div>
                   <div className="dropdown-user-email">
                     {username
                       ? `${username.toLowerCase()}@example.com`

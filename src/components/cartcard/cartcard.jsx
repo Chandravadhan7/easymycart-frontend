@@ -20,7 +20,7 @@ export default function CartCard({ cartitem }) {
 
     try {
       const response = await fetch(
-        `http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/cart/${productId}`,
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/${productId}`,
         {
           method: 'DELETE',
           headers: {
@@ -77,10 +77,6 @@ export default function CartCard({ cartitem }) {
           <button onClick={handleRemoveFromCart}>REMOVE</button>
         </div>
       </div>
-      {/* <div className="cart-item-actions">
-      <button>Save for later</button>
-      <button onClick={handleRemoveFromCart}>Remove</button>
-    </div> */}
     </div>
   );
 }

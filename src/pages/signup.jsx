@@ -49,11 +49,14 @@ export default function SignUp() {
 
     const inputObj = { userName: username, email: email, password: password };
 
-    fetch('http://localhost:8080/user/api/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(inputObj),
-    })
+    fetch(
+      'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/user/api/signup',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(inputObj),
+      },
+    )
       .then((response) => {
         if (!response.ok) throw new Error('Signup failed');
         return response.json();
@@ -143,11 +146,10 @@ export default function SignUp() {
             Already have an account? <a href="/login">Log in</a>
           </div>
         </div>
-        <div className='signup-img-cont'>
-        <img src='https://i.ibb.co/b5SdBsBG/Screenshot-2025-06-11-194813.png'/>
+        <div className="signup-img-cont">
+          <img src="https://i.ibb.co/b5SdBsBG/Screenshot-2025-06-11-194813.png" />
+        </div>
       </div>
-      </div>
-      
     </div>
   );
 }

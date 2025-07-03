@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { removeFromCart } from '../../store/slices/cartSlice';
 import { useDispatch } from 'react-redux';
-import "./quantity.css"
+import './quantity.css';
 
 export default function Quantity({ cartItem }) {
   const [cartDetails, setCartDetails] = useState(null);
@@ -12,15 +12,18 @@ export default function Quantity({ cartItem }) {
   useEffect(() => {
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
-    fetch('http://localhost:8080/cart/', {
-      method: 'GET',
-      credentials: 'include', // Include session cookies
-      headers: {
-        'Content-Type': 'application/json',
-        sessionId: sessionKey,
-        userId: userId,
+    fetch(
+      'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/',
+      {
+        method: 'GET',
+        credentials: 'include', // Include session cookies
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: sessionKey,
+          userId: userId,
+        },
       },
-    })
+    )
       .then((response) => response.json())
       .then((data) => {
         setCartId(data.id);
@@ -34,15 +37,18 @@ export default function Quantity({ cartItem }) {
     let userId = localStorage.getItem('userId');
     if (cartId && cartItem.id) {
       setLoading(true);
-      fetch(`http://localhost:8080/cart/${cartId}/${cartItem.id}`, {
-        method: 'GET',
-        credentials: 'include', // Include session cookies
-        headers: {
-          'Content-Type': 'application/json',
-          sessionId: sessionKey,
-          userId: userId,
+      fetch(
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/${cartId}/${cartItem.id}`,
+        {
+          method: 'GET',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
         },
-      })
+      )
         .then((response) => response.json())
         .then((data) => setCartDetails(data))
         .catch((error) =>
@@ -57,7 +63,7 @@ export default function Quantity({ cartItem }) {
       let sessionKey = localStorage.getItem('sessionId');
       let userId = localStorage.getItem('userId');
       const response = await fetch(
-        `http://localhost:8080/cart/cartitems/${cartItem.id}/increment`,
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/cartitems/${cartItem.id}/increment`,
         {
           method: 'PATCH',
           credentials: 'include', // Include session cookies
@@ -83,7 +89,7 @@ export default function Quantity({ cartItem }) {
       let sessionKey = localStorage.getItem('sessionId');
       let userId = localStorage.getItem('userId');
       const response = await fetch(
-        `http://localhost:8080/cart/cartitems/${cartItem.id}/decrement`,
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/cartitems/${cartItem.id}/decrement`,
         {
           method: 'PATCH',
           credentials: 'include', // Include session cookies
@@ -106,7 +112,6 @@ export default function Quantity({ cartItem }) {
       console.error('Error decrementing quantity:', err);
     }
   }
-  
 
   async function handleRemoveFromCart() {
     const productId = cartItem.id;
@@ -114,15 +119,18 @@ export default function Quantity({ cartItem }) {
     try {
       let sessionKey = localStorage.getItem('sessionId');
       let userId = localStorage.getItem('userId');
-      const response = await fetch(`http://localhost:8080/cart/${productId}`, {
-        method: 'DELETE',
-        credentials: 'include', // Include session cookies
-        headers: {
-          'Content-Type': 'application/json',
-          sessionId: sessionKey,
-          userId: userId,
+      const response = await fetch(
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/${productId}`,
+        {
+          method: 'DELETE',
+          credentials: 'include', // Include session cookies
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
         },
-      });
+      );
 
       if (response.ok) {
         console.log('Product removed successfully');
@@ -141,19 +149,27 @@ export default function Quantity({ cartItem }) {
       {loading ? (
         <span>Loading...</span>
       ) : cartDetails ? (
-        <div className='quantityy'>
-          <button onClick={() => {window.location.reload();increment();}} disabled={cartDetails.quantity >= 10} className='plus'>
-            +
-          </button>
-          <span className='num'>{cartDetails.quantity}</span>
+        <div className="quantityy">
           <button
-            onClick={() => {window.location.reload();
-              cartDetails.quantity > 1 ? decrement() : handleRemoveFromCart()
-            }
-            }
+            onClick={() => {
+              cartDetails.quantity > 1 ? decrement() : handleRemoveFromCart();
+              setTimeout(() => window.location.reload(), 100); // reload after async
+            }}
             disabled={cartDetails.quantity <= 0}
-          className='plus'>
-            -
+            className="plus"
+          >
+            –
+          </button>
+          <span className="num">{cartDetails.quantity}</span>
+          <button
+            onClick={() => {
+              increment();
+              setTimeout(() => window.location.reload(), 100); // reload after async
+            }}
+            disabled={cartDetails.quantity >= 10}
+            className="plus"
+          >
+            +
           </button>
         </div>
       ) : (

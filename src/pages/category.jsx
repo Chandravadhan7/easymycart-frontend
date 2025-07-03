@@ -16,7 +16,7 @@ export default function Category() {
     setLoading(true); // Start loading
 
     fetch(
-      `http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/product/category's/${param.id}`,
+      `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/category's/${param.id}`,
       {
         method: 'GET',
         credentials: 'include',
@@ -40,7 +40,7 @@ export default function Category() {
             if (product.rating_id) {
               promises.push(
                 fetch(
-                  `http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/product/rating/${product.rating_id}`,
+                  `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/rating/${product.rating_id}`,
                   {
                     method: 'GET',
                     credentials: 'include',
@@ -59,7 +59,7 @@ export default function Category() {
             if (product.category_id) {
               promises.push(
                 fetch(
-                  `http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/product/category/${product.category_id}`,
+                  `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/category/${product.category_id}`,
                   {
                     method: 'GET',
                     credentials: 'include',
@@ -95,7 +95,7 @@ export default function Category() {
     const userId = localStorage.getItem('userId');
 
     fetch(
-      'http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/product/category',
+      'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/category',
       {
         method: 'GET',
         credentials: 'include',

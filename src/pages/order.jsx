@@ -12,21 +12,24 @@ export default function Order() {
     try {
       let sessionKey = localStorage.getItem('sessionId');
       let userId = localStorage.getItem('userId');
-      const response = await fetch(`http://localhost:8080/order/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          sessionId: sessionKey,
-          userId: userId,
+      const response = await fetch(
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/order/`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionKey,
+            userId: userId,
+          },
         },
-      });
+      );
 
       const orderentities = await response.json();
 
       const orderWithProducts = await Promise.all(
         orderentities.map(async (order) => {
           const cartResponse = await fetch(
-            `http://localhost:8080/cart/${order.cartId}`,
+            `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/${order.cartId}`,
             {
               method: 'GET',
               headers: {
@@ -34,7 +37,7 @@ export default function Order() {
                 sessionId: sessionKey,
                 userId: userId,
               },
-            }
+            },
           );
 
           const cartItems = await cartResponse.json();
@@ -42,7 +45,7 @@ export default function Order() {
 
           if (firstProductId) {
             const productResponse = await fetch(
-              `http://localhost:8080/product/${firstProductId}`,
+              `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/${firstProductId}`,
               {
                 method: 'GET',
                 headers: {
@@ -50,14 +53,14 @@ export default function Order() {
                   sessionId: sessionKey,
                   userId: userId,
                 },
-              }
+              },
             );
 
             const productDetails = await productResponse.json();
             return { ...order, firstProduct: productDetails };
           }
           return { ...order, firstProduct: null };
-        })
+        }),
       );
       setOrders(orderWithProducts);
     } catch (error) {
@@ -99,7 +102,9 @@ export default function Order() {
           <div className="no-orders-container">
             <div className="no-orders-card">
               <div className="no-orders-icon">🛍️</div>
-              <div className="no-orders-title">Nothing Ordered Yet – Let’s Change That!</div>
+              <div className="no-orders-title">
+                Nothing Ordered Yet – Let’s Change That!
+              </div>
               <div className="no-orders-subtext">
                 Discover amazing products you'll love and start ordering them
               </div>
@@ -124,8 +129,12 @@ export default function Order() {
                 </div>
                 <div className="order-child-title">
                   <div className="odr-tdp">{item?.firstProduct?.title}</div>
-                  <div className="odr-tdp1">{item?.firstProduct?.description}</div>
-                  <div className="odr-tdp">Rs. {item?.firstProduct?.sellingPrice}</div>
+                  <div className="odr-tdp1">
+                    {item?.firstProduct?.description}
+                  </div>
+                  <div className="odr-tdp">
+                    Rs. {item?.firstProduct?.sellingPrice}
+                  </div>
                 </div>
                 <div className="order-child-date">
                   <div className="odr-id">ORDER # {item?.orderId}</div>
@@ -140,11 +149,14 @@ export default function Order() {
                           }}
                         />
                         Delivered on{' '}
-                        {new Date(item.deliveredOn).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        })}
+                        {new Date(item.deliveredOn).toLocaleDateString(
+                          'en-US',
+                          {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          },
+                        )}
                       </div>
                     </div>
                     <div className="odr-dis">your item has been delivered</div>

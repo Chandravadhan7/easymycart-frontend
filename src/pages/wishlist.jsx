@@ -17,19 +17,24 @@ export default function Wishlist() {
         const sessionKey = localStorage.getItem('sessionId');
         const userId = localStorage.getItem('userId');
 
-        const response = await fetch('http://localhost:8080/wishlist/', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            sessionId: sessionKey,
-            userId: userId,
+        const response = await fetch(
+          'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/wishlist/',
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              sessionId: sessionKey,
+              userId: userId,
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           const errorText = await response.text();
-          throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorText}`);
+          throw new Error(
+            `HTTP error! Status: ${response.status}. Message: ${errorText}`,
+          );
         }
 
         const resp = await response.json();
@@ -103,7 +108,8 @@ export default function Wishlist() {
           </div>
           <h1 className="empty-wishlist-heading">Your Wishlist is Empty</h1>
           <p className="empty-wishlist-subtext">
-            Discover amazing products you'll love and start adding them to your wishlist
+            Discover amazing products you'll love and start adding them to your
+            wishlist
           </p>
           <Link to="/">
             <button className="empty-wishlist-button">Browse Products →</button>

@@ -1,40 +1,50 @@
-import { setRecent } from "../store/slices/recentlyVieweditems";
+import { setRecent } from '../store/slices/recentlyVieweditems';
 
 export const recentlyViewed = () => async (dispatch) => {
-  let sessionId = localStorage.getItem("sessionId");
-  let userId = localStorage.getItem("userId");
+  let sessionId = localStorage.getItem('sessionId');
+  let userId = localStorage.getItem('userId');
 
   try {
     // Fetch recently viewed product IDs
-    const response = await fetch(`http://localhost:8080/product/recentlyViewed`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        sessionId: sessionId,
-        userId: userId,
+    const response = await fetch(
+      `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/recentlyViewed`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: sessionId,
+          userId: userId,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch recently viewed products. Status: ${response.status}`);
+      throw new Error(
+        `Failed to fetch recently viewed products. Status: ${response.status}`,
+      );
     }
 
     const recentEntities = await response.json();
 
     // Fetch product details
     const recentProductPromises = recentEntities.map(async (item) => {
-      const productResponse = await fetch(`http://localhost:8080/product/${item.productId}`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          sessionId: sessionId,
-          userId: userId,
+      const productResponse = await fetch(
+        `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/${item.productId}`,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            sessionId: sessionId,
+            userId: userId,
+          },
         },
-      });
+      );
 
       if (!productResponse.ok) {
-        throw new Error(`Product fetch failed. Status: ${productResponse.status}`);
+        throw new Error(
+          `Product fetch failed. Status: ${productResponse.status}`,
+        );
       }
 
       const product = await productResponse.json();
@@ -42,18 +52,23 @@ export const recentlyViewed = () => async (dispatch) => {
 
       // Fetch rating if available
       if (product.rating_id) {
-        let ratingPromise = fetch(`http://localhost:8080/product/rating/${product.rating_id}`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            sessionId: sessionId,
-            userId: userId,
+        let ratingPromise = fetch(
+          `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/rating/${product.rating_id}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              sessionId: sessionId,
+              userId: userId,
+            },
           },
-        })
+        )
           .then((ratingResponse) => {
             if (!ratingResponse.ok) {
-              throw new Error(`Rating fetch failed. Status: ${ratingResponse.status}`);
+              throw new Error(
+                `Rating fetch failed. Status: ${ratingResponse.status}`,
+              );
             }
             return ratingResponse.json();
           })
@@ -66,18 +81,23 @@ export const recentlyViewed = () => async (dispatch) => {
 
       // Fetch category if available
       if (product.category_id) {
-        let categoryPromise = fetch(`http://localhost:8080/product/category/${product.category_id}`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            sessionId: sessionId,
-            userId: userId,
+        let categoryPromise = fetch(
+          `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/product/category/${product.category_id}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              sessionId: sessionId,
+              userId: userId,
+            },
           },
-        })
+        )
           .then((categoryResponse) => {
             if (!categoryResponse.ok) {
-              throw new Error(`Category fetch failed. Status: ${categoryResponse.status}`);
+              throw new Error(
+                `Category fetch failed. Status: ${categoryResponse.status}`,
+              );
             }
             return categoryResponse.json();
           })
@@ -95,11 +115,11 @@ export const recentlyViewed = () => async (dispatch) => {
     // Resolve all product fetch promises
     const recentProducts = await Promise.all(recentProductPromises);
 
-    console.log("Final Recently Viewed Products:", recentProducts);
+    console.log('Final Recently Viewed Products:', recentProducts);
 
     // Dispatch to Redux
     dispatch(setRecent(recentProducts));
   } catch (error) {
-    console.error("Error fetching recently viewed products:", error);
+    console.error('Error fetching recently viewed products:', error);
   }
 };

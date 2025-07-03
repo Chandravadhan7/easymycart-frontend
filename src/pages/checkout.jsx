@@ -7,26 +7,28 @@ import LooksOneIcon from '@mui/icons-material/LooksOne';
 import LooksTwoIcon from '@mui/icons-material/LooksTwo';
 import Looks3Icon from '@mui/icons-material/Looks3';
 import Modal from '../components/modal/modal';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoRadioButtonOn, IoRadioButtonOff } from 'react-icons/io5';
 import { userAddress } from './fetchUserAddress';
 import DoneIcon from '@mui/icons-material/Done';
 
 export default function Checkout() {
   const dispatch = useDispatch();
-  let [cartId, setCartId] = useState(null);
-  let [isModalOpen, setIsModalOpen] = useState(false);
-  let [selectedAddress, setSelectedAddress] = useState(null);
+  const navigate = useNavigate();
+  const [cartId, setCartId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [selectAddressId, setSelectAddressId] = useState(
     localStorage.getItem('selectAddress'),
   );
+  const sessionId = localStorage.getItem('sessionId');
+  const userId = localStorage.getItem('userId');
+
   const [errorMessage, setErrorMessage] = useState(null);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const handleSelectAddress = (address) => {
-    if (!address || !address.id) {
-      console.error('Invalid address selected');
-      return;
-    }
+    if (!address || !address.id) return;
     localStorage.setItem('selectAddress', address.id);
     setSelectAddressId(address.id);
     window.location.reload();
@@ -34,104 +36,105 @@ export default function Checkout() {
 
   useEffect(() => {
     const savedAddressId = localStorage.getItem('selectAddress');
-    if (savedAddressId) {
-      setSelectAddressId(savedAddressId);
-    }
+    if (savedAddressId) setSelectAddressId(savedAddressId);
   }, []);
 
   const getAddress = async () => {
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
     const response = await fetch(
-      `http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/address/${selectAddressId}`,
+      `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/address/${selectAddressId}`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          sessionId: sessionKey,
-          userId: userId,
+          sessionId,
+          userId,
         },
       },
     );
-    if (!response.ok) {
-      console.log('error occured');
+    if (response.ok) {
+      const data = await response.json();
+      setSelectedAddress(data);
     }
-    const data = await response.json();
-    setSelectedAddress(data);
-    console.log(data);
   };
 
   useEffect(() => {
     getAddress();
   }, []);
 
-  let username = localStorage.getItem('userName');
+  const username = localStorage.getItem('userName');
   const cart = useSelector((state) => state.cart);
+
   useEffect(() => {
     const sessionKey = localStorage.getItem('sessionId');
     const userId = localStorage.getItem('userId');
-
-    fetch('http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/cart/', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        sessionId: sessionKey,
-        userId: userId,
+    fetch(
+      'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/',
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId,
+          userId,
+        },
       },
-    })
+    )
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch cart entity');
-        }
+        if (!response.ok) throw new Error('Failed to fetch cart entity');
         return response.json();
       })
-      .then((data) => {
-        setCartId(data.id);
-      })
+      .then((data) => setCartId(data.id))
       .catch((error) => {
-        console.error('Error fetching cart entity:', error);
         setErrorMessage('Unable to fetch your cart. Please try again later.');
       });
   }, []);
+
   async function placeOrder() {
-    let sessionKey = localStorage.getItem('sessionId');
-    let userId = localStorage.getItem('userId');
-    const [response1, response2] = await Promise.all([
-      fetch(
-        `http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/cart/${cartId}/status`,
-        {
-          method: 'PATCH',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            sessionId: sessionKey,
-            userId: userId,
+    try {
+      setIsPlacingOrder(true);
+      let sessionKey = localStorage.getItem('sessionId');
+      let userId = localStorage.getItem('userId');
+      const [response1, response2] = await Promise.all([
+        fetch(
+          `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/${cartId}/status`,
+          {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              sessionId,
+              userId,
+            },
           },
-        },
-      ),
-      fetch(
-        `http://ec2-3-83-158-47.compute-1.amazonaws.com:8080/order/${cartId}?address_id=${selectAddressId}`,
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            sessionId: sessionKey,
-            userId: userId,
+        ),
+        fetch(
+          `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/order/${cartId}?address_id=${selectAddressId}`,
+          {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              sessionId,
+              userId,
+            },
           },
-        },
-      ),
-    ]);
-    if (!response1.ok && !response2.ok) {
-      console.log('error occured');
-    } else {
-      console.log('status updated successfully');
+        ),
+      ]);
+      if (response1.ok && response2.ok) {
+        alert('Order placed successfully!');
+        localStorage.removeItem('selectAddress');
+        navigate('/orders');
+      } else {
+        alert('Failed to place order. Please try again.');
+      }
+    } catch (error) {
+      alert('Something went wrong. Please try again later.');
+    } finally {
+      setIsPlacingOrder(false);
     }
   }
-  useEffect(() => {
-    placeOrder();
-  }, []);
 
   const totalOriginalPrice = useMemo(() => {
     return cart.reduce(
@@ -148,20 +151,13 @@ export default function Checkout() {
   }, [cart]);
 
   const addresses = useSelector((state) => state.address);
-  console.log(addresses);
 
   useEffect(() => {
     dispatch(userAddress());
   }, []);
 
-  const handleOpenModal = () => {
-    console.log('clicked');
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   useEffect(() => {
     if (cartId) {
@@ -169,7 +165,6 @@ export default function Checkout() {
     }
   }, [cartId, dispatch]);
 
-  console.log(cart);
   return (
     <div className="check-out-parent">
       <div className="check-out-cont">
@@ -201,7 +196,7 @@ export default function Checkout() {
               }}
             >
               <div style={{ lineHeight: '150%' }}>LOGIN</div>
-              <div style={{ lineHeight: '10%', color: '#2874f0' }}>
+              <div style={{ lineHeight: '10%', color: '#8e44ec ' }}>
                 <DoneIcon style={{ fontSize: '120%' }} />
               </div>
             </div>
@@ -220,6 +215,7 @@ export default function Checkout() {
             </div>
           </div>
         </div>
+
         <div className="check-address">
           <div
             style={{
@@ -248,30 +244,26 @@ export default function Checkout() {
               }}
             >
               <div style={{ lineHeight: '150%' }}>DELIVERY ADDRESS</div>
-              <div style={{ lineHeight: '10%', color: '#2874f0' }}>
+              <div style={{ lineHeight: '10%', color: '#8e44ec ' }}>
                 <DoneIcon style={{ fontSize: '120%' }} />
               </div>
             </div>
-            <div
-              style={{
-                height: '40%',
-                width: '90%',
-                textTransform: 'capitalize',
-                textAlign: 'left',
-                fontSize: '80%',
-                fontWeight: 'lighter',
-              }}
-            >
-              <span style={{ fontSize: '120%', fontWeight: '550' }}>
-                {selectedAddress?.fullName}
-              </span>{' '}
-              {selectedAddress?.flatNumber}, {selectedAddress?.area},{' '}
-              {selectedAddress?.village}, {selectedAddress?.district},{' '}
-              <span>{selectedAddress?.village}</span>, {selectedAddress?.state}{' '}
-              -{' '}
-              <span style={{ fontSize: '120%', fontWeight: '550' }}>
-                {selectedAddress?.pinCode}
-              </span>
+            <div className="check-add">
+              {selectedAddress && selectedAddress.fullName ? (
+                <>
+                  <span style={{ fontSize: '120%', fontWeight: '550' }}>
+                    {selectedAddress.fullName}
+                  </span>{' '}
+                  {selectedAddress.flatNumber}, {selectedAddress.area},{' '}
+                  {selectedAddress.village}, {selectedAddress.district},{' '}
+                  {selectedAddress.state} -{' '}
+                  <span style={{ fontSize: '120%', fontWeight: '550' }}>
+                    {selectedAddress.pinCode}
+                  </span>
+                </>
+              ) : (
+                <span style={{ color: 'gray' }}>No address selected</span>
+              )}
             </div>
           </div>
           <div
@@ -288,52 +280,51 @@ export default function Checkout() {
             <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
               <div className="location">Select Delivary Address</div>
               <div className="addresses">
-                {addresses.map((item) => {
-                  return (
+                {addresses.map((item) => (
+                  <div
+                    key={item.id}
+                    className="add1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSelectAddress(item);
+                    }}
+                  >
+                    <div style={{ width: '15%', color: 'rgb(10, 101, 239)' }}>
+                      {Number(selectAddressId) === item.id ? (
+                        <IoRadioButtonOn />
+                      ) : (
+                        <IoRadioButtonOff />
+                      )}
+                    </div>
                     <div
-                      className="add1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectAddress(item);
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        textAlign: 'left',
+                        gap: '50%',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
                       }}
                     >
-                      <div style={{ width: '15%', color: 'rgb(10, 101, 239)' }}>
-                        {Number(selectAddressId) === item.id ? (
-                          <IoRadioButtonOn />
-                        ) : (
-                          <IoRadioButtonOff />
-                        )}
+                      <div style={{ fontWeight: 'bold' }}>
+                        {item.fullName} ,{item.pinCode}
                       </div>
                       <div
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          textAlign: 'left',
-                          gap: '50%',
+                          fontSize: '80%',
+                          color: 'rgb(177, 176, 176)',
                           overflow: 'hidden',
                           whiteSpace: 'nowrap',
                           textOverflow: 'ellipsis',
                         }}
                       >
-                        <div style={{ fontWeight: 'bold' }}>
-                          {item.fullName} ,{item.pinCode}{' '}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: '80%',
-                            color: 'rgb(177, 176, 176)',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {item.flatNumber} {item.area} ,{item.village} ,
-                          {item.district}
-                        </div>
+                        {item.flatNumber} {item.area} ,{item.village} ,
+                        {item.district}
                       </div>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
               <Link
                 to={'/addresses'}
@@ -349,12 +340,13 @@ export default function Checkout() {
             </Modal>
           </div>
         </div>
+
         <div className="checkout-pro">
           <div
             style={{
               height: '2.5rem',
               display: 'flex',
-              backgroundColor: '#2874f0',
+              backgroundColor: '#8e44ec ',
               color: 'white',
             }}
           >
@@ -366,12 +358,13 @@ export default function Checkout() {
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {cart.map((item) => {
-              return <CartCard cartitem={item} />;
-            })}
+            {cart.map((item) => (
+              <CartCard cartitem={item} key={item.id} />
+            ))}
           </div>
         </div>
       </div>
+
       <div className="checkout-sum">
         <h3>PRICE DETAILS</h3>
         <div className="summary-line">
@@ -390,9 +383,12 @@ export default function Checkout() {
           <span>Total Amount</span>
           <span>₹{totalSellingPrice}</span>
         </div>
-        <button className="place-order-btn " onClick={placeOrder}>
-          {' '}
-          Continue
+        <button
+          className="place-order-btn"
+          onClick={placeOrder}
+          disabled={isPlacingOrder}
+        >
+          {isPlacingOrder ? 'Placing Order...' : 'Continue'}
         </button>
       </div>
     </div>

@@ -14,7 +14,9 @@ export default function Cart() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [selectAddressId, setSelectAddressId] = useState(localStorage.getItem('selectAddress'));
+  const [selectAddressId, setSelectAddressId] = useState(
+    localStorage.getItem('selectAddress'),
+  );
   const [loading, setLoading] = useState(true);
 
   const handleSelectAddress = (address) => {
@@ -34,14 +36,17 @@ export default function Cart() {
   const getAddress = async () => {
     let sessionKey = localStorage.getItem('sessionId');
     let userId = localStorage.getItem('userId');
-    const response = await fetch(`http://localhost:8080/address/${selectAddressId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        sessionId: sessionKey,
-        userId: userId,
+    const response = await fetch(
+      `http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/address/${selectAddressId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: sessionKey,
+          userId: userId,
+        },
       },
-    });
+    );
     if (!response.ok) return;
     const data = await response.json();
     setSelectedAddress(data);
@@ -55,26 +60,35 @@ export default function Cart() {
   const addresses = useSelector((state) => state.address);
 
   const totalOriginalPrice = useMemo(() => {
-    return cart.reduce((acc, item) => acc + item.originalPrice * item.quantity, 0);
+    return cart.reduce(
+      (acc, item) => acc + item.originalPrice * item.quantity,
+      0,
+    );
   }, [cart]);
 
   const totalSellingPrice = useMemo(() => {
-    return cart.reduce((acc, item) => acc + item.sellingPrice * item.quantity, 0);
+    return cart.reduce(
+      (acc, item) => acc + item.sellingPrice * item.quantity,
+      0,
+    );
   }, [cart]);
 
   useEffect(() => {
     const sessionKey = localStorage.getItem('sessionId');
     const userId = localStorage.getItem('userId');
 
-    fetch('http://localhost:8080/cart/', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        sessionId: sessionKey,
-        userId: userId,
+    fetch(
+      'http://ec2-13-203-205-26.ap-south-1.compute.amazonaws.com:8081/cart/',
+      {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          sessionId: sessionKey,
+          userId: userId,
+        },
       },
-    })
+    )
       .then((response) => {
         if (!response.ok) throw new Error('Failed to fetch cart entity');
         return response.json();
@@ -147,14 +161,22 @@ export default function Cart() {
             <div className="address-details">
               <div className="add-det">
                 <div className="add-det1">
-                  <span style={{ fontFamily: 'Inter, -apple-system, Helvetica, Arial, sans-serif' }}>
+                  <span
+                    style={{
+                      fontFamily:
+                        'Inter, -apple-system, Helvetica, Arial, sans-serif',
+                    }}
+                  >
                     Deliver to:
                   </span>{' '}
-                  {selectedAddress?.fullName}, {selectedAddress?.pinCode}
+                  {selectedAddress?.fullName && selectedAddress?.pinCode
+                    ? `${selectedAddress.fullName}, ${selectedAddress.pinCode}`
+                    : 'No address selected'}
                 </div>
                 <div className="add-det2">
-                  {selectedAddress?.flatNumber}, {selectedAddress?.area}, {selectedAddress?.village},{' '}
-                  {selectedAddress?.district}, {selectedAddress?.state}
+                  {selectedAddress?.flatNumber
+                    ? `${selectedAddress.flatNumber}, ${selectedAddress.area}, ${selectedAddress.village}, ${selectedAddress.district}, ${selectedAddress.state}`
+                    : ''}
                 </div>
               </div>
             </div>
@@ -166,22 +188,60 @@ export default function Cart() {
                 <div className="location">Select Delivery Address</div>
                 <div className="addresses">
                   {addresses.map((item) => (
-                    <div className="add1" key={item.id} onClick={(e) => { e.stopPropagation(); handleSelectAddress(item); }}>
+                    <div
+                      className="add1"
+                      key={item.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectAddress(item);
+                      }}
+                    >
                       <div style={{ width: '15%', color: 'rgb(10, 101, 239)' }}>
-                        {Number(selectAddressId) === item.id ? <IoRadioButtonOn /> : <IoRadioButtonOff />}
+                        {Number(selectAddressId) === item.id ? (
+                          <IoRadioButtonOn />
+                        ) : (
+                          <IoRadioButtonOff />
+                        )}
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'left', gap: '50%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          textAlign: 'left',
+                          gap: '50%',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
                         <div style={{ fontWeight: 'bold' }}>
                           {item.fullName}, {item.pinCode}
                         </div>
-                        <div style={{ fontSize: '80%', color: 'rgb(177, 176, 176)', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                          {item.flatNumber} {item.area}, {item.village}, {item.district}
+                        <div
+                          style={{
+                            fontSize: '80%',
+                            color: 'rgb(177, 176, 176)',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {item.flatNumber} {item.area}, {item.village},{' '}
+                          {item.district}
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
-                <Link to={'/addresses'} style={{ textDecoration: 'none', color: 'rgb(10, 101, 239)', textAlign: 'left', marginLeft: '10%' }}>
+                <Link
+                  to={'/addresses'}
+                  style={{
+                    textDecoration: 'none',
+                    color: 'rgb(10, 101, 239)',
+                    textAlign: 'left',
+                    marginLeft: '10%',
+                  }}
+                >
                   + Add an address
                 </Link>
               </Modal>
@@ -212,9 +272,18 @@ export default function Cart() {
             <span>Total Amount</span>
             <span>₹{totalSellingPrice}</span>
           </div>
-          <Link to="/checkoutpage">
-            <button className="place-order-btn">Place Order</button>
-          </Link>
+          <button
+            className="place-order-btn"
+            onClick={() => {
+              if (!selectedAddress || !selectedAddress.id) {
+                alert('Please select an address');
+              } else {
+                window.location.href = '/checkoutpage';
+              }
+            }}
+          >
+            Place Order
+          </button>
         </div>
       </div>
     );
@@ -222,12 +291,15 @@ export default function Cart() {
 
   return (
     <div className="empty-cart">
-      <h1 className="empty-cart-heading">Your Cart is Empty</h1>
-      <p className="empty-cart-subtext">Looks like you haven't added anything to your cart yet</p>
+      <div className="empty-cart-icon" aria-label="empty cart" role="img">
+        🛒✨
+      </div>
+      <div className="empty-cart-heading">Your Cart is Empty</div>
+      <div className="empty-cart-subtext">
+        Discover amazing products you'll love and add them to your cart!
+      </div>
       <Link to="/">
-        <button className="empty-cart-button">
-          <span role="img" aria-label="shopping-bag">🛍️</span> Start Shopping
-        </button>
+        <button className="empty-cart-button">Browse Products →</button>
       </Link>
     </div>
   );
